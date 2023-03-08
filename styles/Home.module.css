@@ -1,13 +1,14 @@
-.logo {
+.sidebar_menu_header {
     height: 32px;
     margin: 16px;
-    background: rgba(255, 255, 255, 0.2);
 }
 
-.header span {
-    font-size: 18px;
-    color: white;
+.sidebar_menu_header span {
+    font-size: 22px;
     font-weight: bold;
     letter-spacing: 1px;
+}
+
+.sidebar_menu_header_title {
     margin-left: 5px;
 }
