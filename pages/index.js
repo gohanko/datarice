@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, theme } from 'antd';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis} from 'recharts';
+import { RadarChartOutlined } from '@ant-design/icons';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import "antd/dist/reset.css";
 import styles from '@/styles/Home.module.css';
 
@@ -27,7 +28,7 @@ const Chart = () => {
     console.log(data);
     return (
         <LineChart
-            width={1300}
+            width={1200}
             height={579}
             data={data}
         >
@@ -39,29 +40,46 @@ const Chart = () => {
     )
 }
 
-const Home = () => (
-    <Layout>
-        <Sider
-            breakpoint="lg"
-            collapsedWidth="0"
-            onBreakpoint={(broken) => {
-                console.log(broken);
-            }}
-            onCollapse={(collapsed, type) => {
-                console.log(collapsed, type);
-            }}
-        >
-            <div className={styles.logo} />
-            <Menu/>
-        </Sider>
+const Home = () => {
+    const {
+        token: { colorBgContainer },
+      } = theme.useToken();
+
+    return(
         <Layout>
-            <Header style={{ padding: 0 }}>DVisual</Header>
-            <Content style={{ margin: '24px 16px 0' }}>
-                <Chart />
-            </Content>
-            <Footer style={{ textAlign: 'center' }}>©2023 Created by Yii Kuo Chong with ❤️</Footer>
+            <Header className={styles.header}>
+                <div className=''>
+                    <h1>
+                        <RadarChartOutlined style={{ fontSize: '24px' }} />
+                        <span>DVisual</span>
+                    </h1>
+                </div>
+
+                <Menu theme="dark" mode="horizontal" />
+            </Header>
+            <Layout>
+                <Sider
+                    breakpoint="lg"
+                    collapsedWidth="0"
+                    width={250}
+                    style={{ background: colorBgContainer }}
+                    onBreakpoint={(broken) => {
+                        console.log(broken);
+                    }}
+                    onCollapse={(collapsed, type) => {
+                        console.log(collapsed, type);
+                    }}
+                >
+                </Sider>
+                <Layout>
+                    <Content style={{ margin: '24px 16px 0' }}>
+                        <Chart />
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>©2023 Created by Yii Kuo Chong with ❤️</Footer>
+                </Layout>
+            </Layout>
         </Layout>
-    </Layout>
-)
+    )
+};
 
 export default Home;
