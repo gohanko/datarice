@@ -74,10 +74,10 @@ const ChartDisplay = (props) => {
     return (
         <ResponsiveContainer width="100%" height="100%">
             <LineChart data={props.data}>
-                <Line type="monotone" dataKey="temperature" stroke="#8884d8" />
-                <CartesianGrid stroke="#ccc" />
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
                 <XAxis dataKey="time" />
                 <YAxis />
+                <Line type="monotone" dataKey="temperature" stroke="#8884d8" />
                 <Tooltip />
             </LineChart>
         </ResponsiveContainer>
@@ -105,7 +105,7 @@ const Chart = () => {
     }
 
     if (isLoading) return <Spin tip="Loading..." size="large" />
-    if (!data) return <p>No profile data</p>
+    if (!data) return <Spin tip="Loading..." size="large" />
 
     return (
         <>
