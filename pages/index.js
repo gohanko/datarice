@@ -1,50 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Layout,
-    Menu,
-    Card,
-    theme,
-    DatePicker,
-    Form,
-    Spin,
-    Input,
-    Button,
-    Radio,
-} from 'antd';
-import {
-    RadarChartOutlined,  
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-} from '@ant-design/icons';
+import { io } from "socket.io-client";
 import dayjs from 'dayjs';
+import { Layout, Card, theme, Spin, Radio } from 'antd';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
-
 import styles from '@/styles/Home.module.css';
 
 const { Header, Sider, Content, Footer } = Layout;
-const { RangePicker } = DatePicker;
 
 const Chart = () => {
     const [data, setData] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [size, setSize] = useState('last_month'); // default is 'middle'
 
-    useEffect(() => {
-        fetchData('4.30', '101.15', dayjs(dayjs()).subtract(dayjs(dayjs()).daysInMonth(), 'day'), dayjs().subtract(7, 'day'));
+    useEffect(() => {   
+        socketInitializer();
     }, [])
+    
+    const socketInitializer = async () => {
+        await fetch('/api/temperature_data');
+        const socket = io();
+  
+        socket.on('connect', () => {
+            console.log('Websocket API connected.');
+            socket.emit('load-data');
+            console.log('Sent load-data request.');
+        })
 
-    const fetchData = (latitude, longitude, start_date, end_date) => {
-        start_date = dayjs(start_date).format('YYYY-MM-DD')
-        end_date =  dayjs(end_date).format('YYYY-MM-DD')
-
-
-        fetch(`https://archive-api.open-meteo.com/v1/archive?latitude=${latitude}&longitude=${longitude}&start_date=${start_date}&end_date=${end_date}&daily=temperature_2m_mean&timezone=Asia%2FSingapore`)
-            .then((res) => res.json())
-            .then((data) => {
-                const usable_data = data['daily']['time'].map((time, index) => ({ time: dayjs(time).format('MMM D'), temperature: data['daily']['temperature_2m_mean'][index] }));
-                setData(usable_data)
-                setLoading(false)
-            })
+        socket.on('load-data', (data) => {
+            setLoading(false);
+            const usable_data = data['daily']['time'].map((time, index) => ({
+                time: dayjs(time).format('MMM D'),
+                temperature: data['daily']['temperature_2m_mean'][index] 
+            }));
+            
+            setData(usable_data);
+            console.log('Loaded data: ' + data);
+        })
     }
 
     if (isLoading) return <Spin tip="Loading..." size="large" />
@@ -76,7 +68,6 @@ const Chart = () => {
                         }
 
 
-                        fetchData('4.30', '101.15', end_date, start_date);
                         setSize(e.target.value)
                     }}
                     style={{
