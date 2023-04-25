@@ -18,7 +18,8 @@
     "react-dom": "18.2.0",
     "recharts": "^2.4.3",
     "socket.io": "^4.6.1",
-    "socket.io-client": "^4.6.1"
+    "socket.io-client": "^4.6.1",
+    "swr": "^2.1.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

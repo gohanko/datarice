@@ -1,38 +1,54 @@
 import path from 'path';
 import fs from 'fs';
 import { Server } from 'socket.io';
+import { list_files } from '@/utils/utils';
+import { DATA_STORE_FOLDER } from '@/utils/constants';
 
 const TemperatureDataSocketHandler = (req, res) => {
     if (res.socket.server.io) {
         console.log('Socket is already running')
-    } else {
-        console.log('Socket is initializing')
-        const io = new Server(res.socket.server)
-        res.socket.server.io = io
-
-        io.on('connection', (socket) => {
-            socket.on('load-data', (msg) => {
-                console.log('Received load-data request.')
-                
-                const filename = path.join(process.cwd(), 'mock_data') + '/monthly_temp.json';
-                let content = fs.readFileSync(filename, 'utf8')
-                socket.broadcast.emit('load-data', JSON.parse(content))
-                
-                fs.watch(filename, (event, targetfile) => {
-                    if (event == 'change') {
-                        const new_content = fs.readFileSync(filename, 'utf8')
-
-                        if (content != new_content) {
-                            content = JSON.parse(new_content);
-                            socket.broadcast.emit('load-data', content);
-                        }
-                    }
-                })
-            })
-        })
+        res.end()
+        return;
     }
 
-    res.end()
+    const io = new Server(res.socket.server)
+    res.socket.server.io = io
+
+    io.on('connection', (socket) => {
+        socket.on('list-existing-data-files', (_) => {
+            const files = list_files(DATA_STORE_FOLDER);
+            socket.broadcast.emit('list-existing-data-files', files)
+            console.log('Received List Existing Data Files')
+        })
+
+        socket.on('load-data-from-data-file', (data) => {
+            const packet = JSON.parse(data)
+            if (!packet['filename']) {
+                socket.broadcast.emit('load-data-from-data-file', 'filename is needed!')
+                return
+            }
+
+            const full_file_path = path.join(DATA_STORE_FOLDER, packet.filename);
+            
+            let content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
+            content['filename'] = packet['filename']
+            socket.broadcast.emit('load-data-from-data-file', content)
+            
+            fs.watch(full_file_path, (event, targetfile) => {
+                if (event == 'change') {
+                    const new_content = fs.readFileSync(full_file_path, 'utf8')
+                    
+                    if (content != new_content) {
+                        new_content['filename'] = packet['filename'];
+                        content = JSON.parse(new_content);
+                        socket.broadcast.emit('load-data-from-data-file', content);
+                    }
+                }
+            })
+        })
+    })
+
+    res.end();
 }
 
 export default TemperatureDataSocketHandler;
