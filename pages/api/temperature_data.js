@@ -36,11 +36,11 @@ const TemperatureDataSocketHandler = (req, res) => {
             
             fs.watch(full_file_path, (event, targetfile) => {
                 if (event == 'change') {
-                    const new_content = fs.readFileSync(full_file_path, 'utf8')
+                    let new_content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
                     
                     if (content != new_content) {
                         new_content['filename'] = packet['filename'];
-                        content = JSON.parse(new_content);
+                        content = new_content
                         socket.broadcast.emit('load-data-from-data-file', content);
                     }
                 }

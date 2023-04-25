@@ -31,10 +31,14 @@ const ChartCollection = () => {
                 time: dayjs(time).format('MMM D'),
                 temperature: data['daily']['temperature_2m_mean'][index] 
             }));
-            
-            const chart_data = { ...chartData };
+
+
+            const chart_data = {};
             chart_data[data['filename']] = usable_data;
-            setChartData(chart_data);
+            setChartData(chartData => ({
+                ...chartData,
+                ...chart_data,
+            }));
         })
     }
     
