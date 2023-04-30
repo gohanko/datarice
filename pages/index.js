@@ -32,7 +32,7 @@ const Home = () => {
                         <ChartCollection />
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
-                        hogmaster - Created by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong</a> with ❤️
+                        DataRice - Created by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong</a> with ❤️
                     </Footer>
                 </Layout>
             </Layout>
