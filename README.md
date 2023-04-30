@@ -1,2 +1,2 @@
-# dvisual
-Dvisual is a simple, web-based visualisation software.
+# hogmaster
+hogmaster is a simple, web-based visualisation software.
