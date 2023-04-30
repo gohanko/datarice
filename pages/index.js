@@ -1,40 +1,54 @@
 import React, { useState } from 'react';
-import { Layout, theme } from 'antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import styles from '@/styles/Home.module.css';
+import { Layout, Typography, theme, Menu } from 'antd';
 import ChartCollection from '../components/ChartCollection/chart_collection';
+import {
+    DesktopOutlined,
+    FileOutlined,
+    PieChartOutlined,
+    TeamOutlined,
+    UserOutlined,
+    GithubFilled
+  } from '@ant-design/icons';
 
 const { Header, Sider, Content, Footer } = Layout;
+const { Title } = Typography;
+
 
 const Home = () => {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const { token: { colorBgContainer } } = theme.useToken();
 
+    const navigation_items = [
+        {
+            key: 1,
+            label: 'Dashboard',
+            icon: <PieChartOutlined />,
+        },
+    ]
+
     return (
-        <Layout style={{ height: '100%' }}>
+        <Layout hasSider>
             <Sider
                 breakpoint="lg"
-                trigger={null}
                 collapsible
                 collapsed={collapsed}
+                onCollapse={(value) => setCollapsed(value)}
             >
-                <div className={styles.logo} />
+                <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }}/>
+                <Menu
+                    mode="inline"
+                    theme='dark'
+                    defaultSelectedKeys={['1']}
+                    defaultOpenKeys={['sub1']}
+                    items={navigation_items}
+                />
             </Sider>
-            <Layout>
-                <Header style={{ padding: 0, background: colorBgContainer }}>
-                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                        className: styles.trigger,
-                        onClick: () => setCollapsed(!collapsed),
-                    })}
-                </Header>
-                <Layout style={{ overflow: 'scroll' }}>
-                    <Content style={{ margin: '24px 16px' }}>
-                        <ChartCollection />
-                    </Content>
-                    <Footer style={{ textAlign: 'center' }}>
-                        DataRice - Created by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong</a> with ❤️
-                    </Footer>
-                </Layout>
+            <Layout style={{ minHeight: '100vh' }}>
+                <Header style={{ padding: 0, background: colorBgContainer }}></Header>
+                <Content style={{ margin: '24px 16px' }}>
+                    <ChartCollection />
+                </Content>
+                <Footer style={{ textAlign: 'center' }}> DataRice - Created by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong</a> with ❤️</Footer>
             </Layout>
         </Layout>
     )
