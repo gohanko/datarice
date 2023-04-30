@@ -18,18 +18,15 @@ const ChartCollection = () => {
             socket.on('list-existing-data-files', (data) => {
                 setFileList(data);
             })
-
-            return () => {
-                socket.off();
-            }
         })
     }, [])
-    
-    let charts = fileList.map((filename, index) => {
-        return (<Chart key={index} filename={filename} />)
-    })
 
-    return (<React.Fragment>{ charts }</React.Fragment>);
+    return (
+        <React.Fragment>
+            { fileList.map((filename, index) => 
+                (<Chart key={index} filename={filename} />))}
+        </React.Fragment>
+    );
 }
 
 export default ChartCollection;

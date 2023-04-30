@@ -40,22 +40,20 @@ const TemperatureDataSocketHandler = (req, res) => {
                 socket.broadcast.emit('load-data-from-data-file', 'filename is needed!')
                 return
             }
-            
+
             const full_file_path = path.join(DATA_STORE_FOLDER, packet.filename);
             
             let content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
             content['filename'] = packet['filename']
             socket.broadcast.emit('load-data-from-data-file', content)
             
-            fs.watch(full_file_path, (event, targetfile) => {
-                if (event == 'change') {
-                    let new_content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
-                    
-                    if (content != new_content) {
-                        new_content['filename'] = packet['filename'];
-                        content = new_content
-                        socket.broadcast.emit('load-data-from-data-file', content);
-                    }
+            chokidar.watch(full_file_path).on('change', (event, path) => {
+                let new_content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
+                
+                if (content != new_content) {
+                    new_content['filename'] = packet['filename'];
+                    content = new_content
+                    socket.broadcast.emit('load-data-from-data-file', content);
                 }
             })
         })

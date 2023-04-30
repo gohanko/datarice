@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { Layout, Card } from 'antd';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
-const Chart = ({ filename, socket }) => {
+const Chart = ({ filename }) => {
     const [chartData, setChartData] = useState({});
 
     useEffect(() => {
@@ -14,7 +14,7 @@ const Chart = ({ filename, socket }) => {
                 time: dayjs(time).format('MMM D'),
                 temperature: data['daily']['temperature_2m_mean'][index] 
             }));
-                        
+
             setChartData(usable_data)
         })
 
