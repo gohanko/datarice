@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import chokidar from 'chokidar';
 import { Server } from 'socket.io';
 import { list_files } from '@/utils/utils';
 import { DATA_STORE_FOLDER } from '@/utils/constants';
@@ -12,13 +13,25 @@ const TemperatureDataSocketHandler = (req, res) => {
     }
 
     const io = new Server(res.socket.server)
-    res.socket.server.io = io
 
     io.on('connection', (socket) => {
-        socket.on('list-existing-data-files', (_) => {
+        const list_files_and_broadcast = () => {
             const files = list_files(DATA_STORE_FOLDER);
-            socket.broadcast.emit('list-existing-data-files', files)
-            console.log('Received List Existing Data Files')
+            socket.broadcast.emit('list-existing-data-files', files);
+        }
+
+        socket.on('list-existing-data-files', (_) => {
+            list_files_and_broadcast();
+            
+            chokidar
+                .watch(DATA_STORE_FOLDER)
+                .on('add', (event, path) => {
+                    list_files_and_broadcast();
+                })
+                .on('unlink', (event, path) => {
+                    console.log('Unlinked');
+                    list_files_and_broadcast();
+                })
         })
 
         socket.on('load-data-from-data-file', (data) => {
@@ -27,7 +40,7 @@ const TemperatureDataSocketHandler = (req, res) => {
                 socket.broadcast.emit('load-data-from-data-file', 'filename is needed!')
                 return
             }
-
+            
             const full_file_path = path.join(DATA_STORE_FOLDER, packet.filename);
             
             let content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
@@ -48,6 +61,7 @@ const TemperatureDataSocketHandler = (req, res) => {
         })
     })
 
+    res.socket.server.io = io
     res.end();
 }
 
