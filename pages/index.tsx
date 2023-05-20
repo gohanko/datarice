@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Typography, theme, Menu } from 'antd';
 import ChartCollection from '../components/ChartCollection/chart_collection';
 import {
-    DesktopOutlined,
-    FileOutlined,
     PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
-    GithubFilled
 } from '@ant-design/icons';
 
 const { Header, Sider, Content, Footer } = Layout;

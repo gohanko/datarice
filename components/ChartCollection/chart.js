@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import dayjs from 'dayjs';
 import { Layout, Card } from 'antd';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 const Chart = ({ filename }) => {
-    const [chartData, setChartData] = useState({});
+    const [options, setOptions] = useState({});
 
     useEffect(() => {
         const socket = io();
@@ -15,7 +15,46 @@ const Chart = ({ filename }) => {
                 temperature: data['daily']['temperature_2m_mean'][index] 
             }));
 
-            setChartData(usable_data)
+            const options = {
+                tooltip : {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: data['daily']['time']
+                    },
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series: [
+                    {
+                        data: data['daily']['temperature_2m_mean'],
+                        type: 'line',
+                        smooth: true,
+                    },
+                ],
+                tooltip: {
+                    trigger: 'axis',
+                },
+            }
+
+            console.log(options)
+
+            setOptions(options)
         })
 
         socket.emit('load-data-from-data-file', JSON.stringify({ filename: filename }));
@@ -32,16 +71,11 @@ const Chart = ({ filename }) => {
             >
 
             </div>
-            <Layout style={{ height: 240 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData} style={{ backgroundColor: 'white' }}>
-                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
-                        <XAxis dataKey="time" />
-                        <YAxis />
-                        <Line type="monotone" dataKey="temperature" stroke="#8884d8" />
-                        <Tooltip />
-                    </LineChart>
-                </ResponsiveContainer>
+            <Layout style={{ height: 240, backgroundColor: 'white' }}>
+                <ReactECharts 
+                    option={options}
+                    style={{ height: 240 }}
+                />
             </Layout>
         </Card>
     );
