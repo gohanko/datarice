@@ -2,11 +2,11 @@
   "name": "DataRice",
   "version": "0.1.0",
   "private": true,
-  "bin": "server.js",
+  "bin": "index.js",
   "pkg": {
     "assets": [
       "./.next/**/*",
-      "node_modules/@socket.io/**/*"
+      "node_modules/socket.io/"
     ],
     "scripts": [
       "./.next/dist/**/*.js"
@@ -16,8 +16,8 @@
     "dev": "node server.js",
     "start": "NODE_ENV=production node server.js",
     "build:web": "next build",
-    "build:bin": "pkg . --targets node18-linux-x64 --out-path build",
-    "build:full": "rimraf ./.next/ ./build/ && npm ci && npm run build:web && npm run build:bin",
+    "build:bin": "pkg . --debug --targets node18-linux-x64 --out-path dist",
+    "build:full": "rimraf ./.next/ ./dist/ && npm ci && npm run build:web && npm run build:bin",
     "export": "next export",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
@@ -30,7 +30,6 @@
     "echarts-for-react": "^3.0.2",
     "next": "13.2.3",
     "node-tail": "^0.0.4",
-    "pkg": "^5.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "socket.io": "^4.6.1",
@@ -42,6 +41,7 @@
     "eslint": "^8.39.0",
     "eslint-config-next": "^13.3.1",
     "eslint-config-prettier": "^8.7.0",
+    "pkg": "^5.8.1",
     "rimraf": "^5.0.1"
   }
 }
