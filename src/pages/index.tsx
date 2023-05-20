@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Typography, theme, Menu } from 'antd';
-import ChartCollection from '../components/ChartCollection/chart_collection';
+import ChartCollection from '../common/components/ChartCollection/chart_collection';
 import {
     PieChartOutlined,
 } from '@ant-design/icons';
