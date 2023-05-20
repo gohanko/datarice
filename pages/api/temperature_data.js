@@ -7,7 +7,6 @@ import { DATA_STORE_FOLDER } from '@/utils/constants';
 
 const TemperatureDataSocketHandler = (req, res) => {
     if (res.socket.server.io) {
-        console.log('Socket is already running')
         res.end()
         return;
     }
@@ -29,7 +28,6 @@ const TemperatureDataSocketHandler = (req, res) => {
                     list_files_and_broadcast();
                 })
                 .on('unlink', (event, path) => {
-                    console.log('Unlinked');
                     list_files_and_broadcast();
                 })
         })

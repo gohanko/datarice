@@ -11,7 +11,6 @@ const ChartCollection = () => {
             const socket = io();
 
             socket.on('connect', () => {
-                console.log('Websocket API connected.');
                 socket.emit('list-existing-data-files')
             })
     
@@ -20,7 +19,7 @@ const ChartCollection = () => {
             })
         })
     }, [])
-
+    
     return (
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             { fileList.map((filename, index) => 

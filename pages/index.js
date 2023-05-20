@@ -8,7 +8,7 @@ import {
     TeamOutlined,
     UserOutlined,
     GithubFilled
-  } from '@ant-design/icons';
+} from '@ant-design/icons';
 
 const { Header, Sider, Content, Footer } = Layout;
 const { Title } = Typography;
