@@ -1,2 +1,2 @@
-# DataRice
-DataRice is a simple, web-based visualisation software.
+# datarice
+datarice is a simple, web-based visualisation software.
