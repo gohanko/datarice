@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Layout, theme, Menu } from 'antd';
+import Image from 'next/image';
+import { Layout, theme, Menu, Row, Col } from 'antd';
 import ChartCollection from '../components/ChartList';
 import {
+    LineChartOutlined,
     PieChartOutlined,
+    FolderOpenOutlined,
+    InfoCircleOutlined,
 } from '@ant-design/icons';
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -15,8 +19,23 @@ const Home = () => {
         {
             key: 1,
             label: 'Dashboard',
+            icon: <LineChartOutlined />,
+        },
+        {
+            key: 2,
+            label: 'File Manager',
+            icon: <FolderOpenOutlined />,
+        },
+        {
+            key: 3,
+            label: 'System Resources',
             icon: <PieChartOutlined />,
         },
+        {
+            key: 4,
+            label: 'About',
+            icon: <InfoCircleOutlined />,
+        },  
     ]
 
     return (
@@ -27,7 +46,33 @@ const Home = () => {
                 collapsed={collapsed}
                 onCollapse={(value) => setCollapsed(value)}
             >
-                <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }}/>
+                <Row>
+                    <Col span={24}>
+                        <h1>
+                            <a style={{
+                                height: 64,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                paddingInlineStart: 15,
+                                color: 'white',
+                                fontSize: '18px',
+                                fontWeight: 'bolder'
+                            }}>
+                                <Image
+                                    src="/rice.png"
+                                    width={32}
+                                    height={32}
+                                    alt='Header Logo'
+                                    style={{
+                                        marginInlineEnd: 12
+                                    }}
+                                />
+                                <span style={{ fontWeight: 'lighter', color: '#cdd9e5' }}>data</span>
+                                <span>rice</span>
+                            </a>
+                        </h1>
+                    </Col>
+                </Row>
                 <Menu
                     mode="inline"
                     theme='dark'
