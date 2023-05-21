@@ -3,7 +3,7 @@ import fs from 'fs';
 import chokidar from 'chokidar';
 import { Server } from 'socket.io';
 import { list_files } from '../../common/utils/utils';
-import { DATA_STORE_FOLDER } from '../../common/utils/constants';
+import { DATA_STORE_DIRECTORY } from '../../common/utils/constants';
 
 const TemperatureDataSocketHandler = (req, res) => {
     if (res.socket.server.io) {
@@ -15,7 +15,7 @@ const TemperatureDataSocketHandler = (req, res) => {
 
     io.on('connection', (socket) => {
         const list_files_and_broadcast = () => {
-            const files = list_files(DATA_STORE_FOLDER);
+            const files = list_files(DATA_STORE_DIRECTORY);
             socket.broadcast.emit('list-existing-data-files', files);
         }
 
@@ -23,7 +23,7 @@ const TemperatureDataSocketHandler = (req, res) => {
             list_files_and_broadcast();
             
             chokidar
-                .watch(DATA_STORE_FOLDER)
+                .watch(DATA_STORE_DIRECTORY)
                 .on('add', (event, path) => {
                     list_files_and_broadcast();
                 })
@@ -39,7 +39,7 @@ const TemperatureDataSocketHandler = (req, res) => {
                 return
             }
 
-            const full_file_path = path.join(DATA_STORE_FOLDER, packet.filename);
+            const full_file_path = path.join(DATA_STORE_DIRECTORY, packet.filename);
             
             let content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
             content['filename'] = packet['filename']
