@@ -14,6 +14,24 @@ const Chart = ({ filename }) => {
                 return
             }
 
+            const findMinFromSeriesList = (series_list) => {
+                var data = []
+                series_list.map(series => {
+                    data = [...data, ...series.data]
+                })
+
+                data = data.filter((p) => p != null) // Filter out all 'null'
+                return Math.floor(Math.min(...data)) - 1
+            }
+
+            const series_list = [
+                {
+                    type: 'line',
+                    smooth: true,
+                    data: data['daily']['temperature_2m_mean'],
+                },
+            ]
+
             const chart_options = {
                 tooltip : {
                     trigger: 'axis'
@@ -27,25 +45,17 @@ const Chart = ({ filename }) => {
                 ],
                 yAxis : [
                     {
-                        type : 'value'
+                        type : 'value',
+                        min: findMinFromSeriesList(series_list),
                     }
                 ],
-                series: [
-                    {
-                        data: data['daily']['temperature_2m_mean'],
-                        type: 'line',
-                        smooth: true,
-                    },
-                ],
+                series: series_list,
                 tooltip: {
                     trigger: 'axis',
                 },
             }
 
-            setChartOptions(chartOptions => ({
-                ...chartOptions,
-                ...chart_options,
-            }))
+            setChartOptions(chart_options)
         })
 
         socket.emit('load-data-from-data-file', JSON.stringify({ filename: filename }));
