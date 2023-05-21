@@ -5,34 +5,24 @@ import dayjs from 'dayjs';
 import { Layout, Card } from 'antd';
 
 const Chart = ({ filename }) => {
-    const [options, setOptions] = useState({});
+    const [chartOptions, setChartOptions] = useState({});
 
     useEffect(() => {
         const socket = io();
         socket.on('load-data-from-data-file', (data) => {
-            const usable_data = data['daily']['time'].map((time, index) => ({
-                time: dayjs(time).format('MMM D'),
-                temperature: data['daily']['temperature_2m_mean'][index] 
-            }));
+            if (data.filename !== filename) {
+                return
+            }
 
-            const options = {
+            const chart_options = {
                 tooltip : {
                     trigger: 'axis'
                 },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                },
+                grid: { top: 8, right: 8, bottom: 24, left: 36 },
                 xAxis: [
                     {
                         type: 'category',
-                        data: data['daily']['time']
+                        data: data['daily']['time'].map((time) => (dayjs(time).format('MMM D')))
                     },
                 ],
                 yAxis : [
@@ -52,9 +42,10 @@ const Chart = ({ filename }) => {
                 },
             }
 
-            console.log(options)
-
-            setOptions(options)
+            setChartOptions(chartOptions => ({
+                ...chartOptions,
+                ...chart_options,
+            }))
         })
 
         socket.emit('load-data-from-data-file', JSON.stringify({ filename: filename }));
@@ -73,7 +64,7 @@ const Chart = ({ filename }) => {
             </div>
             <Layout style={{ height: 240, backgroundColor: 'white' }}>
                 <ReactECharts 
-                    option={options}
+                    option={chartOptions}
                     style={{ height: 240 }}
                 />
             </Layout>
