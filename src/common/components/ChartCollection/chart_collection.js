@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space } from 'antd';
+import { Space, Col, Row } from 'antd';
 import { io } from "socket.io-client";
 import Chart from './chart';
 
@@ -19,11 +19,15 @@ const ChartCollection = () => {
             })
         })
     }, [])
-    
+
     return (
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+            <Row gutter={[16, 16]}>
             { fileList.map((filename, index) => 
-                (<Chart key={index} filename={filename} />))}
+                (<Col span={12}>
+                    <Chart key={index} filename={filename} />
+                </Col>))}
+            </Row>
         </Space>
     );
 }

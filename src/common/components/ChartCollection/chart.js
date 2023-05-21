@@ -63,21 +63,10 @@ const Chart = ({ filename }) => {
     
     return (
         <Card title={filename}>
-            <div
-                style={{
-                    width: '100%',
-                    display: 'flow-root',
-                    marginBottom: '10px',
-                }}
-            >
-
-            </div>
-            <Layout style={{ height: 240, backgroundColor: 'white' }}>
-                <ReactECharts 
-                    option={chartOptions}
-                    style={{ height: 240 }}
-                />
-            </Layout>
+            <ReactECharts 
+                option={chartOptions}
+                style={{ height: 240 }}
+            />
         </Card>
     );
 }
