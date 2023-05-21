@@ -1,0 +1,10 @@
+[Unit]
+Description=datarice
+
+[Service]
+Type=
+Restart=always
+ExecStart=/usr/local/bin/datarice
+
+[Install]
+WantedBy=multi-user.target
