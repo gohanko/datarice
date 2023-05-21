@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import dayjs from 'dayjs';
-import { Layout, Card } from 'antd';
+import { Card } from 'antd';
 
-const Chart = ({ filename }) => {
+type ChartProps = {
+    filename: string
+}
+
+const Chart = ({ filename }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
 
     useEffect(() => {
@@ -50,16 +54,13 @@ const Chart = ({ filename }) => {
                     }
                 ],
                 series: series_list,
-                tooltip: {
-                    trigger: 'axis',
-                },
             }
 
             setChartOptions(chart_options)
         })
 
         socket.emit('load-data-from-data-file', JSON.stringify({ filename: filename }));
-    }, [])
+    }, [filename])
     
     return (
         <Card title={filename}>

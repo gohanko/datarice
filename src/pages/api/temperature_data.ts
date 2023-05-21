@@ -19,15 +19,15 @@ const TemperatureDataSocketHandler = (req, res) => {
             socket.broadcast.emit('list-existing-data-files', files);
         }
 
-        socket.on('list-existing-data-files', (_) => {
+        socket.on('list-existing-data-files', () => {
             list_files_and_broadcast();
             
             chokidar
                 .watch(DATA_STORE_DIRECTORY)
-                .on('add', (event, path) => {
+                .on('add', () => {
                     list_files_and_broadcast();
                 })
-                .on('unlink', (event, path) => {
+                .on('unlink', () => {
                     list_files_and_broadcast();
                 })
         })
@@ -45,7 +45,7 @@ const TemperatureDataSocketHandler = (req, res) => {
             content['filename'] = packet.filename
             socket.broadcast.emit('load-data-from-data-file', content)
             
-            chokidar.watch(full_file_path).on('change', (event, path) => {
+            chokidar.watch(full_file_path).on('change', () => {
                 let new_content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
                 
                 if (content != new_content) {

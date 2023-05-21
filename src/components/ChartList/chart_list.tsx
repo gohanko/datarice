@@ -3,7 +3,7 @@ import { Space, Col, Row } from 'antd';
 import { io } from "socket.io-client";
 import Chart from './chart';
 
-const ChartCollection = () => {
+const ChartList = () => {
     const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
@@ -23,13 +23,13 @@ const ChartCollection = () => {
     return (
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Row gutter={[16, 16]}>
-            { fileList.map((filename, index) => 
-                (<Col span={12}>
-                    <Chart key={index} filename={filename} />
-                </Col>))}
+                { fileList.map((filename, index) => 
+                    (<Col span={12} key={index}>
+                        <Chart filename={filename} />
+                    </Col>))}
             </Row>
         </Space>
     );
 }
 
-export default ChartCollection;
+export default ChartList;

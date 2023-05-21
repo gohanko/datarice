@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Layout, Typography, theme, Menu } from 'antd';
-import ChartCollection from '../common/components/ChartCollection/chart_collection';
+import { Layout, theme, Menu } from 'antd';
+import ChartCollection from '../components/ChartList';
 import {
     PieChartOutlined,
 } from '@ant-design/icons';
 
 const { Header, Sider, Content, Footer } = Layout;
-const { Title } = Typography;
-
 
 const Home = () => {
     const [collapsed, setCollapsed] = useState(true);
