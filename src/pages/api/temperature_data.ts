@@ -1,9 +1,7 @@
 import path from 'path';
-import fs from 'fs';
-import chokidar from 'chokidar';
 import { Server } from 'socket.io';
-import { list_files } from '../../common/utils/utils';
-import { DATA_STORE_DIRECTORY } from '../../common/utils/constants';
+import { FileManagerBackend } from '../../common/utility';
+import { DATA_STORE_DIRECTORY } from '../../common/constants';
 
 const TemperatureDataSocketHandler = (req, res) => {
     if (res.socket.server.io) {
@@ -12,27 +10,26 @@ const TemperatureDataSocketHandler = (req, res) => {
     }
 
     const io = new Server(res.socket.server)
-
+    const file_manager_backend = FileManagerBackend();
+    
     io.on('connection', (socket) => {
-        const list_files_and_broadcast = () => {
-            const files = list_files(DATA_STORE_DIRECTORY);
-            socket.broadcast.emit('list-existing-data-files', files);
-        }
-
         socket.on('list-existing-data-files', () => {
-            list_files_and_broadcast();
-            
-            chokidar
-                .watch(DATA_STORE_DIRECTORY)
-                .on('add', () => {
-                    list_files_and_broadcast();
-                })
-                .on('unlink', () => {
-                    list_files_and_broadcast();
-                })
+            const emit_files = (files) => {
+                socket.broadcast.emit('list-existing-data-files', files)
+            }
+
+            file_manager_backend
+                .list_and_watch(DATA_STORE_DIRECTORY, emit_files)
+                .on('add', emit_files)
+                .on('unlink', emit_files)
         })
 
         socket.on('load-data-from-data-file', (data) => {
+            const emit_content = (content) => {
+                content['filename'] = packet.filename
+                socket.broadcast.emit('load-data-from-data-file', content)
+            }
+
             const packet = JSON.parse(data)
             if (!packet['filename']) {
                 socket.broadcast.emit('load-data-from-data-file', 'ERROR: Filename is needed!')
@@ -40,20 +37,9 @@ const TemperatureDataSocketHandler = (req, res) => {
             }
 
             const full_file_path = path.join(DATA_STORE_DIRECTORY, packet.filename);
-            
-            let content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
-            content['filename'] = packet.filename
-            socket.broadcast.emit('load-data-from-data-file', content)
-            
-            chokidar.watch(full_file_path).on('change', () => {
-                let new_content = JSON.parse(fs.readFileSync(full_file_path, 'utf8'))
-                
-                if (content != new_content) {
-                    new_content['filename'] = packet['filename'];
-                    content = new_content
-                    socket.broadcast.emit('load-data-from-data-file', content);
-                }
-            })
+            file_manager_backend
+                .read_and_watch(full_file_path, emit_content)
+                .on('change', emit_content)
         })
     })
 
