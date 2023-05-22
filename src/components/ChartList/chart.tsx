@@ -32,7 +32,7 @@ const Chart = ({ filename }: ChartProps) => {
                 {
                     type: 'line',
                     smooth: true,
-                    data: data['daily']['temperature_2m_mean'],
+                    data: data['temperature'],
                 },
             ]
 
@@ -44,7 +44,7 @@ const Chart = ({ filename }: ChartProps) => {
                 xAxis: [
                     {
                         type: 'category',
-                        data: data['daily']['time'].map((time) => (dayjs(time).format('MMM D')))
+                        data: data['date'].map((time) => (dayjs(time).format('MMM D')))
                     },
                 ],
                 yAxis : [
