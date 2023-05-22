@@ -34,7 +34,9 @@ const read_data_file = (filename) => {
         break
     }
 
-    return parsed_data;
+    return {
+        data: parsed_data
+    };
 }
 
 const FileManagerBackend = () => {
