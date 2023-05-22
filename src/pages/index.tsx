@@ -62,12 +62,13 @@ const Home = () => {
                         <h1>
                             <a style={{
                                 height: 64,
+                                width: '100%',
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                paddingInlineStart: 15,
+                                paddingInlineStart: collapsed ? 0 : 15,
                                 color: 'white',
                                 fontSize: '18px',
-                                fontWeight: 'bolder'
+                                fontWeight: 'bolder',
                             }}>
                                 <Image
                                     src="/rice.png"
@@ -75,11 +76,15 @@ const Home = () => {
                                     height={32}
                                     alt='Header Logo'
                                     style={{
-                                        marginInlineEnd: 12
+                                        margin: collapsed ? 'auto': '0px 12px 0px 0px',
                                     }}
                                 />
-                                <span style={{ fontWeight: 'lighter', color: '#cdd9e5' }}>data</span>
-                                <span>rice</span>
+                                { !collapsed && 
+                                <React.Fragment>
+                                    <span style={{ fontWeight: 'lighter', color: '#cdd9e5' }}>data</span>
+                                    <span>rice</span>
+                                </React.Fragment>
+                                }
                             </a>
                         </h1>
                     </Col>
