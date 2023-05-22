@@ -52,7 +52,12 @@ const Chart = ({ filename }: ChartProps) => {
                 tooltip : {
                     trigger: 'axis'
                 },
-                grid: { top: 8, right: 8, bottom: 24, left: 36 },
+                grid: {
+                    top: 8,
+                    right: 8,
+                    bottom: 24,
+                    left: 36,
+                },
                 xAxis: xAxis,
                 yAxis : [
                     {
