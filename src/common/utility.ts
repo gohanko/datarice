@@ -21,23 +21,20 @@ const read_data_file = (filename) => {
 
     var parsed_data = []
     switch(extension) {
-        case SUPPORTED_FILE_FORMAT[0]:
-        case SUPPORTED_FILE_FORMAT[1]:
-        case SUPPORTED_FILE_FORMAT[2]:
-        case SUPPORTED_FILE_FORMAT[3]:
-            parsed_data = xlsx.parse(raw_data);
-            break
-        case SUPPORTED_FILE_FORMAT[4]:
-            parsed_data = JSON.parse(raw_data.toString())
-            break
-        default:
-            break
+    case SUPPORTED_FILE_FORMAT[0]:
+    case SUPPORTED_FILE_FORMAT[1]:
+    case SUPPORTED_FILE_FORMAT[2]:
+    case SUPPORTED_FILE_FORMAT[3]:
+        parsed_data = xlsx.parse(raw_data);
+        break
+    case SUPPORTED_FILE_FORMAT[4]:
+        parsed_data = JSON.parse(raw_data.toString())
+        break
+    default:
+        break
     }
 
-    return {
-        filename: '',
-        data: parsed_data
-    };
+    return parsed_data;
 }
 
 const FileManagerBackend = () => {

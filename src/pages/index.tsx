@@ -7,11 +7,13 @@ import {
     PieChartOutlined,
     FolderOpenOutlined,
     InfoCircleOutlined,
+    CreditCardOutlined,
 } from '@ant-design/icons';
 
 const { Header, Sider, Content, Footer } = Layout;
 
 const Home = () => {
+    const [currentOption, setCurrentOption] = useState('1');
     const [collapsed, setCollapsed] = useState(true);
     const { token: { colorBgContainer } } = theme.useToken();
 
@@ -33,10 +35,19 @@ const Home = () => {
         },
         {
             key: 4,
+            label: 'Terminal',
+            icon: <CreditCardOutlined />,
+        },
+        {
+            key: 5,
             label: 'About',
             icon: <InfoCircleOutlined />,
         },  
     ]
+
+    const onClickMenu = (event) => {
+        setCurrentOption(event.key);
+    }
 
     return (
         <Layout hasSider>
@@ -76,15 +87,17 @@ const Home = () => {
                 <Menu
                     mode="inline"
                     theme='dark'
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
+                    onClick={onClickMenu}
+                    defaultSelectedKeys={[currentOption]}
                     items={navigation_items}
                 />
             </Sider>
             <Layout style={{ minHeight: '100vh' }}>
                 <Header style={{ padding: 0, background: colorBgContainer }}></Header>
                 <Content style={{ margin: '24px 16px' }}>
-                    <ChartCollection />
+                    { currentOption == '1' &&
+                        <ChartCollection />
+                    }
                 </Content>
                 <Footer style={{ textAlign: 'center' }}> DataRice - Created by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong</a> with ❤️</Footer>
             </Layout>
