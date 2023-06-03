@@ -25,14 +25,15 @@ const TemperatureDataSocketHandler = (req, res) => {
         })
 
         socket.on('load-data-from-data-file', (data) => {
+            const packet = JSON.parse(data)
+
             const emit_content = (content) => {
                 content['filename'] = packet.filename
                 socket.broadcast.emit('load-data-from-data-file', content)
             }
 
-            const packet = JSON.parse(data)
             if (!packet['filename']) {
-                socket.broadcast.emit('load-data-from-data-file', 'ERROR: Filename is needed!')
+                emit_content('ERROR: Filename is needed!')
                 return
             }
 

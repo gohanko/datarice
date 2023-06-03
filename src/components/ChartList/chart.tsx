@@ -14,7 +14,7 @@ const Chart = ({ filename }: ChartProps) => {
     useEffect(() => {
         const socket = io();
         socket.on('load-data-from-data-file', (data) => {
-            if (data.filename !== filename) {
+            if (data.filename != filename) {
                 return
             }
 
@@ -68,17 +68,19 @@ const Chart = ({ filename }: ChartProps) => {
                 series: series_list,
             }
 
+            
             setChartOptions(chart_options)
         })
 
         socket.emit('load-data-from-data-file', JSON.stringify({ filename: filename }));
-    }, [filename])
+    }, [])
     
     return (
         <Card title={filename}>
             <ReactECharts 
                 option={chartOptions}
                 style={{ height: 240 }}
+                notMerge={true}
             />
         </Card>
     );

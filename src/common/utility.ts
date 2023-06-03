@@ -28,7 +28,7 @@ const read_data_file = (filename) => {
         parsed_data = xlsx.parse(raw_data);
         break
     case SUPPORTED_FILE_FORMAT[4]:
-        parsed_data = JSON.parse(raw_data.toString())
+        parsed_data = JSON.parse(raw_data)
         break
     default:
         break
@@ -52,7 +52,11 @@ const FileManagerBackend = () => {
         callback(files)
 
         const on = (event_type, callback) => {
-            watcher.on(event_type, () => { callback(files) });
+            watcher.on(event_type, () => { 
+                const new_files = list(path)
+                callback(new_files)
+            })
+
             return { on }
         }
 
@@ -61,18 +65,20 @@ const FileManagerBackend = () => {
 
     const read_and_watch = (path, callback) => {
         const watcher = chokidar.watch(path);
-        var content = read_data_file(path);
+        let content = read_data_file(path);
 
         callback(content);
 
         const on = (event_type, callback) => {
-            var new_content = read_data_file(path)
-
-            if (content != new_content) {
-                content = new_content
-                watcher.on(event_type, () => { callback(content)})
-            }
-
+            watcher.on(event_type, () => {
+                const new_content = read_data_file(path)
+            
+                if (content != new_content) {
+                    content = new_content
+                    callback(new_content)
+                }
+            })
+                
             return { on }
         }
 
