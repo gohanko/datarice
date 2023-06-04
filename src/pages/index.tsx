@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Layout, theme, Menu, Row, Col } from 'antd';
-import ChartCollection from '../components/ChartList';
+import ChartCollection from '../components/ChartManager';
 import {
     LineChartOutlined,
     PieChartOutlined,

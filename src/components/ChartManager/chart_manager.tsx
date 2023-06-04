@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Col, Row } from 'antd';
 import { io } from "socket.io-client";
-import Chart from './chart';
+import Chart from '../Chart';
 
-const ChartList = () => {
+const ChartManager = () => {
     const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
@@ -32,4 +32,4 @@ const ChartList = () => {
     );
 }
 
-export default ChartList;
+export default ChartManager;
