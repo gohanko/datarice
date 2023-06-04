@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import ChartSettings from './chart_settings';
+import { DEFAULT_CHART_OPTIONS } from '../../common/constants'
+import { convert_data_to_2D_table } from '../../common/utility'
 
 type ChartProps = {
     filename: string
@@ -14,63 +16,43 @@ const Chart = ({ filename }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
     const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(false);
 
+    const intiializeChartOptions = (data) => {
+        if (data.filename != filename) {
+            return
+        }
+
+        const source = convert_data_to_2D_table(data)
+        const chart_options = {
+            ...DEFAULT_CHART_OPTIONS,
+            title: {
+                text: filename,
+            },
+            dataset: {
+                source: source
+            },
+            xAxis: {
+                type: 'category',
+                axisLabel: {
+                    formatter: ((value) => {
+                        return dayjs(value).format('MMM D')
+                    })
+                }
+            },
+            yAxis: {
+                min: 24
+            },
+            series: [...Array(source[0].length - 1)].map(() => ({
+                type: 'line'
+            })),
+        };
+
+        return chart_options
+    }
+
     useEffect(() => {
         const socket = io();
         socket.on('load-data-from-data-file', (data) => {
-            if (data.filename != filename) {
-                return
-            }
-
-            const findMinFromSeriesList = (series_list) => {
-                var data = []
-                series_list.map(series => {
-                    data = [...data, ...series.data]
-                })
-
-                data = data.filter((p) => p != null) // Filter out all 'null'
-                return Math.floor(Math.min(...data)) - 1
-            }
-
-            const xAxis = [
-                {
-                    type: 'category',
-                    data: data['data'][Object.keys(data['data'])[0]].map((time) => (dayjs(time).format('MMM D')))
-                }
-            ]
-            const series_list = []
-
-            // If LineChart first data is the xAxis, the rest are data for yAxis.
-            Object.entries(data['data']).forEach(([key, value], index) => {              
-                if (index > 0) {
-                    series_list.push({
-                        name: key,
-                        type: 'line',
-                        smooth: 'true',
-                        data: value,
-                    })
-                }
-            })
-
-            const chart_options = {
-                tooltip : {
-                    trigger: 'axis'
-                },
-                grid: {
-                    top: 8,
-                    bottom: 24,
-                    left: 36,
-                },
-                xAxis: xAxis,
-                yAxis : [
-                    {
-                        type : 'value',
-                        min: findMinFromSeriesList(series_list),
-                    }
-                ],
-                series: series_list,
-            }
-
-            
+            const chart_options = intiializeChartOptions(data);
             setChartOptions(chart_options)
         })
 
@@ -79,7 +61,6 @@ const Chart = ({ filename }: ChartProps) => {
 
     return (
         <Card
-            title={filename}
             actions={[
                 <SettingOutlined
                     key="setting"
