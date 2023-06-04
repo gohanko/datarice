@@ -1,3 +1,10 @@
 const DATA_STORE_DIRECTORY = process.env.DATA_STORE_DIRECTORY;
 
-export { DATA_STORE_DIRECTORY };
+const DEFAULT_CHART_TYPE_SIZES = {
+    'line': 12
+}
+
+export {
+    DATA_STORE_DIRECTORY,
+    DEFAULT_CHART_TYPE_SIZES,
+};
