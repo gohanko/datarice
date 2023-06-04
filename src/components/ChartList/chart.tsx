@@ -3,6 +3,8 @@ import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import dayjs from 'dayjs';
 import { Card } from 'antd';
+import { SettingOutlined } from '@ant-design/icons';
+import ChartSettings from './chart_settings';
 
 type ChartProps = {
     filename: string
@@ -10,6 +12,7 @@ type ChartProps = {
 
 const Chart = ({ filename }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
+    const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(false);
 
     useEffect(() => {
         const socket = io();
@@ -54,7 +57,6 @@ const Chart = ({ filename }: ChartProps) => {
                 },
                 grid: {
                     top: 8,
-                    right: 8,
                     bottom: 24,
                     left: 36,
                 },
@@ -74,9 +76,23 @@ const Chart = ({ filename }: ChartProps) => {
 
         socket.emit('load-data-from-data-file', JSON.stringify({ filename: filename }));
     }, [])
-    
+
     return (
-        <Card title={filename}>
+        <Card
+            title={filename}
+            actions={[
+                <SettingOutlined
+                    key="setting"
+                    onClick={() => setIsChartSettingsOpen(!isChartSettingsOpen)}
+                />,
+              ]}
+        >
+            <ChartSettings
+                chart_options={chartOptions}
+                setChartOptions={setChartOptions}
+                isChartSettingsOpen={isChartSettingsOpen}
+                setIsChartSettingsOpen={setIsChartSettingsOpen}
+            />
             <ReactECharts 
                 option={chartOptions}
                 style={{ height: 240 }}
