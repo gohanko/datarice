@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Select, Space, Typography, Col, Row } from 'antd';
+
+const { Text } = Typography;
 
 type ChartSettingsProps = {
     chart_options: object,
@@ -24,6 +26,44 @@ const ChartSettings = ({ chart_options, setChartOptions, isChartSettingsOpen, se
             ]}
             onCancel={() => setIsChartSettingsOpen(false)}
         >
+            <Space direction='vertical'>
+                <Row gutter={[16, 16]} align={'middle'}>
+                    <Col span={8}>
+                        <Text>X Axis: </Text>
+                    </Col>
+                    <Col span={16}>
+                        <Select
+                            defaultValue="lucy"
+                            style={{ width: 120 }}
+                            onChange={updateChartOptions}
+                            options={[
+                                { value: 'jack', label: 'Jack' },
+                                { value: 'lucy', label: 'Lucy' },
+                                { value: 'Yiminghe', label: 'yiminghe' },
+                                { value: 'disabled', label: 'Disabled', disabled: true },
+                            ]}
+                        />
+                    </Col>
+                </Row>
+                <Row gutter={[16, 16]} align={'middle'}>
+                    <Col span={8}>
+                        <Text>Y Axis: </Text>
+                    </Col>
+                    <Col span={16}>
+                        <Select
+                            defaultValue="lucy"
+                            style={{ width: 120 }}
+                            onChange={updateChartOptions}
+                            options={[
+                                { value: 'jack', label: 'Jack' },
+                                { value: 'lucy', label: 'Lucy' },
+                                { value: 'Yiminghe', label: 'yiminghe' },
+                                { value: 'disabled', label: 'Disabled', disabled: true },
+                            ]}
+                        />
+                    </Col>
+                </Row>
+            </Space>
 
         </Modal>
     )

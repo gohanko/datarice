@@ -11,11 +11,20 @@ const DEFAULT_CHART_OPTIONS = {
     toolbox: {
         show: true,
         feature: {
-            dataZoom: {
-                yAxisIndex: 'none'
+            magicType: {
+                show: true,
+                type: [
+                    'line',
+                    'bar',
+                    'pie',
+                    'scatter',
+                    'effectScatter',
+                    'parallel',
+                    'candlestick',
+                    'map',
+                    'funnel'
+                ]
             },
-            dataView: { readOnly: false },
-            magicType: { type: ['line', 'bar'] },
             restore: {},
             saveAsImage: {}
         }
