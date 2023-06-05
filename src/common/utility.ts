@@ -92,30 +92,7 @@ const FileManagerBackend = () => {
     }
 }
 
-/**
- * Converts data to a 2D table.
- */
-const convert_data_to_2D_table = (data) => {
-    const dataset = []
-    dataset.push(Object.keys(data['data']))
-
-    const rows = []
-    Object.keys(data['data']).forEach((key) => {
-        data['data'][key].forEach((value, index) => {
-            if (!rows[index]) {
-                rows[index] = []
-            }
-
-            rows[index].push(value)
-        })
-    })
-
-    dataset.push(...rows)
-    return dataset
-}
-
 export {
     read_data_file,
     FileManagerBackend,
-    convert_data_to_2D_table,
 };

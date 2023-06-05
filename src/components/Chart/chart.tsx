@@ -6,7 +6,28 @@ import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import ChartSettings from './chart_settings';
 import { DEFAULT_CHART_OPTIONS } from '../../common/constants'
-import { convert_data_to_2D_table } from '../../common/utility'
+
+/**
+ * Converts data to a 2D table.
+ */
+const convert_data_to_2D_table = (data) => {
+    const dataset = []
+    dataset.push(Object.keys(data['data']))
+
+    const rows = []
+    Object.keys(data['data']).forEach((key) => {
+        data['data'][key].forEach((value, index) => {
+            if (!rows[index]) {
+                rows[index] = []
+            }
+
+            rows[index].push(value)
+        })
+    })
+
+    dataset.push(...rows)
+    return dataset
+}
 
 type ChartProps = {
     filename: string
