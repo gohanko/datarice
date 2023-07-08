@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Col, Row } from 'antd';
+import { Space, Col, Row, FloatButton } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { io } from "socket.io-client";
 import Chart from '../Chart';
+import ChartSettings from '../ChartSettings';
 import { DEFAULT_CHART_TYPE_SIZES } from '../../common/constants'
 
 type ChartObject = {
@@ -13,22 +15,27 @@ type ChartObject = {
 
 const ChartManager = () => {
     const [chartList, setChartList] = useState<ChartObject[] | []>([])
+    const [fileList, setFileList] = useState([])
+    const [isAddChartModalOpen, setIsAddChartModalOpen] = useState(false)
 
-    const initializeChartList = (file_list) => {
-        const chart_list: ChartObject[] = []
+    const _create_chart = (filename) => {
+        const chart_list: ChartObject[] = chartList
 
+        const chart = {
+            filename: filename,
+            type: 'line',
+            size: DEFAULT_CHART_TYPE_SIZES['line'],
+            component: <Chart filename={filename} />
+        }
+
+        chart_list.push(chart)
+        setChartList(chart_list)
+    }
+
+    const generateAllCharts = (file_list) => {
         file_list.forEach(filename => {
-            const chart = {
-                filename: filename,
-                type: 'line',
-                size: DEFAULT_CHART_TYPE_SIZES['line'],
-                component: <Chart filename={filename} />
-            }
-
-            chart_list.push(chart);
+            _create_chart(filename)
         })
-
-        setChartList(chart_list);
     }
 
     useEffect(() => {
@@ -40,7 +47,7 @@ const ChartManager = () => {
             })
     
             socket.on('list-existing-data-files', (file_list) => {
-                initializeChartList(file_list)
+                setFileList(file_list)
             })
         })
     }, [])
@@ -50,6 +57,18 @@ const ChartManager = () => {
             <Row gutter={[16, 16]}>
                 { chartList.map((chart, index) => <Col span={chart.size} key={index}>{chart.component}</Col>)}
             </Row>
+
+            <FloatButton
+                icon={<PlusOutlined />}
+                onClick={() => { setIsAddChartModalOpen(!isAddChartModalOpen) }}
+            />
+            <ChartSettings
+                file_list={fileList}
+                isChartSettingsOpen={isAddChartModalOpen}
+                setIsChartSettingsOpen={setIsAddChartModalOpen}
+                createChart={_create_chart}
+                title={"Add New Chart"}
+            />
         </Space>
     );
 }

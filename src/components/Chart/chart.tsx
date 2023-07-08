@@ -3,7 +3,6 @@ import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import ChartSettings from './chart_settings';
 import ChartOptionsManager from '../ChartOptionsManager';
 
 type ChartProps = {
@@ -12,7 +11,6 @@ type ChartProps = {
 
 const Chart = ({ filename }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
-    const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(false);
 
     const chart_options_manager = ChartOptionsManager()
 
@@ -35,16 +33,9 @@ const Chart = ({ filename }: ChartProps) => {
             actions={[
                 <SettingOutlined
                     key="setting"
-                    onClick={() => setIsChartSettingsOpen(!isChartSettingsOpen)}
                 />,
               ]}
         >
-            <ChartSettings
-                chart_options={chartOptions}
-                setChartOptions={setChartOptions}
-                isChartSettingsOpen={isChartSettingsOpen}
-                setIsChartSettingsOpen={setIsChartSettingsOpen}
-            />
             <ReactECharts 
                 option={chartOptions}
                 style={{ height: 240 }}
