@@ -43,7 +43,13 @@ const ChartOptionsManager = () => {
                 type: 'category',
                 axisLabel: {
                     formatter: ((value) => {
-                        return dayjs(value).format('MMM D')
+                        const date = dayjs(value, 'MMM D')
+
+                        if (date.isValid()) {
+                            return date
+                        }
+
+                        return value
                     })
                 }
             },
