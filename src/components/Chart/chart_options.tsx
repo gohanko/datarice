@@ -1,9 +1,10 @@
 import { DEFAULT_CHART_OPTIONS } from "../../common/constants"
 import dayjs from 'dayjs';
 
-
-const ChartOptionsManager = () => {
-    const default_options = DEFAULT_CHART_OPTIONS
+const ChartOptions = () => {
+    const default_options = {
+        ...DEFAULT_CHART_OPTIONS
+    }
 
     /**
      * Converts data to a 2D table.
@@ -27,7 +28,7 @@ const ChartOptionsManager = () => {
         return dataset
     }
 
-    const set_data = (data) => {
+    const get_options = (data) => {
         const filename = data.filename
         const dataset = _convert_data_to_2D_table(data)
 
@@ -65,8 +66,8 @@ const ChartOptionsManager = () => {
     }
 
     return {
-        set_data
+        get_options
     }
 }
 
-export default ChartOptionsManager
+export default ChartOptions

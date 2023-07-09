@@ -3,39 +3,57 @@ import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import ChartOptionsManager from '../ChartOptionsManager';
+import ChartOptions from './chart_options';
+import ChartSettings from '../ChartSettings';
 
 type ChartProps = {
-    filename: string
+    file_list: Array<string>
+    is_chart_settings_open: boolean
 }
 
-const Chart = ({ filename }: ChartProps) => {
+const Chart = ({ file_list, is_chart_settings_open }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
-
-    const chart_options_manager = ChartOptionsManager()
+    const [selectedFilename, setSelectedFilename] = useState()
+    const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(is_chart_settings_open);
+    
+    const chart_options = ChartOptions()
 
     useEffect(() => {
-        const socket = io();
-        socket.on('load-data-from-data-file', (data) => {
-            if (data.filename != filename) {
-                return
-            }
-    
-            const chart_options = chart_options_manager.set_data(data)
-            setChartOptions(chart_options)
-        })
+        if (selectedFilename) {
+            const socket = io();
+            socket.on('load-data-from-data-file', (data) => {
+                if (data.filename != selectedFilename) {
+                    return
+                }
+        
+                const options = chart_options.get_options(data)
+                setChartOptions(chartOptions => ({
+                    ...chartOptions,
+                    ...options,
+                }))
+            })
 
-        socket.emit('load-data-from-data-file', JSON.stringify({ filename: filename }));
-    }, [])
+
+            socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
+        }
+    }, [selectedFilename])
 
     return (
         <Card
             actions={[
                 <SettingOutlined
                     key="setting"
+                    onClick={() => setIsChartSettingsOpen(!isChartSettingsOpen)}
                 />,
               ]}
         >
+            <ChartSettings
+                file_list={file_list}
+                isChartSettingsOpen={isChartSettingsOpen}
+                setIsChartSettingsOpen={setIsChartSettingsOpen}
+                setSelectedFilename={setSelectedFilename}
+                title={selectedFilename}
+            />
             <ReactECharts 
                 option={chartOptions}
                 style={{ height: 240 }}
