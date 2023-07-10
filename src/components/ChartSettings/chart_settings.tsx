@@ -7,7 +7,8 @@ import {
     Typography,
     Col,
     Row,
-    Collapse
+    Collapse,
+    Form
 } from 'antd';
 
 const { Text } = Typography;
@@ -21,54 +22,37 @@ type ChartSettingsProps = {
 }
 
 const ChartSettings = ({ file_list, isChartSettingsOpen, setIsChartSettingsOpen, setSelectedFilename, title }: ChartSettingsProps) => {
+    const [form] = Form.useForm();
+    
     return (
         <Modal
             title={title}
             open={isChartSettingsOpen}
-            footer={[
-                <Button
-                    key="submit"
-                    type="primary"
-                    onClick={() => {
-                        setIsChartSettingsOpen(false)
-                    }}
-                >
-                    Submit
-                </Button>,
-            ]}
+            okText="Create"
+            cancelText="Cancel"
+            onOk={form.submit}
             onCancel={() => setIsChartSettingsOpen(false)}
         >
-            <Space direction='vertical'>
-                <Row gutter={[16, 16]} align={'middle'}>
-                    <Col span={12}>
-                        <Text>Filename: </Text>
-                    </Col>
-                    <Col span={12}>
-                        <Select
-                            style={{ width: 120 }}
-                            options={file_list.map(file => ({
-                                value: file,
-                                label: file
-                            }))}
-                            onChange={(value) => {
-                                setSelectedFilename(value)
-                            }}
-                        />
-                    </Col>
-                </Row>
-                <Row gutter={[0, 0]} align={'middle'}>
-                    <Collapse
-                        ghost={true}
-                        items={[
-                            {
-                                key: 1,
-                                label: "Advanced Settings",
-                                children: <p>hello!</p>
-                            }
-                        ]}
+            <Form
+                form={form}
+                onFinish={(values) => {
+                    setSelectedFilename(values['filename']);
+                    setIsChartSettingsOpen(false)
+                }}
+            >
+                <Form.Item
+                    name={'filename'}
+                    label={'Filename'}
+                >
+                    <Select
+                        style={{ width: 120 }}
+                        options={file_list.map(file => ({
+                            value: file,
+                            label: file
+                        }))}
                     />
-                </Row>
-            </Space>
+                </Form.Item>
+            </Form>
         </Modal>
     )
 }
