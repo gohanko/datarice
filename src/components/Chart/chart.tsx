@@ -37,7 +37,7 @@ const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: Chart
         if (selectedFilename) {
             socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
         }
-    }, [selectedFilename])
+    }, [chart_options, selectedFilename])
 
     return (
         <Card
