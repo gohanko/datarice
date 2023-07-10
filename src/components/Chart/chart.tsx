@@ -17,27 +17,27 @@ const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: Chart
     const [chartOptions, setChartOptions] = useState({});
     const [selectedFilename, setSelectedFilename] = useState()
     const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(is_chart_settings_open);
-    
+
     const chart_options = ChartOptions()
+    const socket = io();
+
+    socket.on('load-data-from-data-file', (data) => {
+        if (data.filename != selectedFilename) {
+            return
+        }
+
+        const options = chart_options.get_options(data)
+        setChartOptions(chartOptions => ({
+            ...chartOptions,
+            ...options,
+        }))
+    })
 
     useEffect(() => {
-        const socket = io();
-        socket.on('load-data-from-data-file', (data) => {
-            if (data.filename != selectedFilename) {
-                return
-            }
-
-            const options = chart_options.get_options(data)
-            setChartOptions(chartOptions => ({
-                ...chartOptions,
-                ...options,
-            }))
-        })
-
         if (selectedFilename) {
             socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
         }
-    }, [chart_options, selectedFilename])
+    }, [selectedFilename])
 
     return (
         <Card
