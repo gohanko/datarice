@@ -37,12 +37,20 @@ const ChartManager = () => {
             type: 'line',
             size: DEFAULT_CHART_TYPE_SIZES['line'],
             component: <Chart
+                index={chart_list.length}
                 file_list={fileList}
                 is_chart_settings_open={true}
+                remove_chart={_remove_chart}
             />
         }
 
         chart_list.push(chart)
+        setChartList(chart_list)
+    }
+
+    const _remove_chart = (index) => {
+        const chart_list: ChartObject[] = [...chartList]
+        chart_list.splice(index, 1)
         setChartList(chart_list)
     }
 

@@ -14,14 +14,16 @@ import {
 const { Text } = Typography;
 
 type ChartSettingsProps = {
+    index: number,
     file_list: Array<string>,
     isChartSettingsOpen: boolean,
     setIsChartSettingsOpen: Function,
     setSelectedFilename: Function,
-    title: string
+    title: string,
+    remove_chart: Function,
 }
 
-const ChartSettings = ({ file_list, isChartSettingsOpen, setIsChartSettingsOpen, setSelectedFilename, title }: ChartSettingsProps) => {
+const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettingsOpen, setSelectedFilename, title, remove_chart }: ChartSettingsProps) => {
     const [form] = Form.useForm();
     
     return (
@@ -31,7 +33,10 @@ const ChartSettings = ({ file_list, isChartSettingsOpen, setIsChartSettingsOpen,
             okText="Create"
             cancelText="Cancel"
             onOk={form.submit}
-            onCancel={() => setIsChartSettingsOpen(false)}
+            onCancel={() => {
+                setIsChartSettingsOpen(false)
+                remove_chart(index)
+            }}
         >
             <Form
                 form={form}

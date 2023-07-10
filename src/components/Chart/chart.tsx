@@ -7,11 +7,13 @@ import ChartOptions from './chart_options';
 import ChartSettings from '../ChartSettings';
 
 type ChartProps = {
+    index: number,
     file_list: Array<string>
-    is_chart_settings_open: boolean
+    is_chart_settings_open: boolean,
+    remove_chart: Function,
 }
 
-const Chart = ({ file_list, is_chart_settings_open }: ChartProps) => {
+const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
     const [selectedFilename, setSelectedFilename] = useState()
     const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(is_chart_settings_open);
@@ -53,6 +55,8 @@ const Chart = ({ file_list, is_chart_settings_open }: ChartProps) => {
                 setIsChartSettingsOpen={setIsChartSettingsOpen}
                 setSelectedFilename={setSelectedFilename}
                 title={selectedFilename}
+                index={index}
+                remove_chart={remove_chart}
             />
             <ReactECharts 
                 option={chartOptions}
