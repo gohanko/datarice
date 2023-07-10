@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Layout, theme, Menu, Row, Col } from 'antd';
-import ChartCollection from '../components/ChartManager';
+import ChartDashboard from '../components/ChartDashboard';
 import {
     LineChartOutlined,
     PieChartOutlined,
@@ -101,7 +101,7 @@ const Home = () => {
                 <Header style={{ padding: 0, background: colorBgContainer }}></Header>
                 <Content style={{ margin: '24px 16px' }}>
                     { currentOption == '1' &&
-                        <ChartCollection />
+                        <ChartDashboard />
                     }
                 </Content>
                 <Footer style={{ textAlign: 'center' }}> DataRice - Created by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong</a> with ❤️</Footer>

@@ -3,7 +3,6 @@ import { Space, Col, Row, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { io } from "socket.io-client";
 import Chart from '../Chart';
-import ChartSettings from '../ChartSettings';
 import { DEFAULT_CHART_TYPE_SIZES } from '../../common/constants'
 
 type ChartObject = {
@@ -12,7 +11,7 @@ type ChartObject = {
     component: React.JSX.Element
 }
 
-const ChartManager = () => {
+const ChartDashboard = () => {
     const [chartList, setChartList] = useState<ChartObject[] | []>([])
     const [fileList, setFileList] = useState([])
 
@@ -70,4 +69,4 @@ const ChartManager = () => {
     );
 }
 
-export default ChartManager;
+export default ChartDashboard;
