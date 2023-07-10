@@ -21,21 +21,20 @@ const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: Chart
     const chart_options = ChartOptions()
 
     useEffect(() => {
+        const socket = io();
+        socket.on('load-data-from-data-file', (data) => {
+            if (data.filename != selectedFilename) {
+                return
+            }
+
+            const options = chart_options.get_options(data)
+            setChartOptions(chartOptions => ({
+                ...chartOptions,
+                ...options,
+            }))
+        })
+
         if (selectedFilename) {
-            const socket = io();
-            socket.on('load-data-from-data-file', (data) => {
-                if (data.filename != selectedFilename) {
-                    return
-                }
-        
-                const options = chart_options.get_options(data)
-                setChartOptions(chartOptions => ({
-                    ...chartOptions,
-                    ...options,
-                }))
-            })
-
-
             socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
         }
     }, [selectedFilename])

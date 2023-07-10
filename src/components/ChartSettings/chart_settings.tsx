@@ -30,18 +30,37 @@ const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettin
         <Modal
             title={title}
             open={isChartSettingsOpen}
-            okText="Create"
-            cancelText="Cancel"
-            onOk={form.submit}
             onCancel={() => {
                 setIsChartSettingsOpen(false)
-                remove_chart(index)
             }}
+            footer={[
+                <Button
+                    key="delete"
+                    type="primary"
+                    danger={true}
+                    onClick={() => {
+                        remove_chart(index)
+                        setIsChartSettingsOpen(false)
+                    }}
+                >
+                    Delete
+                </Button>,
+                <Button
+                    key="submit"
+                    htmlType='submit'
+                    type="primary"
+                    onClick={() => {
+                        form.submit()
+                        setIsChartSettingsOpen(false)
+                    }}
+                >
+                    Submit
+                </Button>,
+            ]}
         >
             <Form
                 form={form}
                 onFinish={(values) => {
-                    setSelectedFilename(values['filename']);
                     setIsChartSettingsOpen(false)
                 }}
             >
@@ -55,6 +74,9 @@ const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettin
                             value: file,
                             label: file
                         }))}
+                        onChange={(value) => {
+                            setSelectedFilename(value);
+                        }}
                     />
                 </Form.Item>
             </Form>
