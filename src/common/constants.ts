@@ -16,13 +16,7 @@ const DEFAULT_CHART_OPTIONS = {
                 type: [
                     'line',
                     'bar',
-                    'pie',
-                    'scatter',
-                    'effectScatter',
-                    'parallel',
-                    'candlestick',
-                    'map',
-                    'funnel'
+                    'stack',
                 ]
             },
             restore: {},
