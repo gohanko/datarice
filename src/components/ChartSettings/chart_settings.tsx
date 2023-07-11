@@ -7,8 +7,6 @@ import {
     Form
 } from 'antd';
 
-const { Text } = Typography;
-
 type ChartSettingsProps = {
     index: number,
     file_list: Array<string>,
@@ -21,23 +19,45 @@ type ChartSettingsProps = {
 
 const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettingsOpen, setSelectedFilename, title, remove_chart }: ChartSettingsProps) => {
     const [form] = Form.useForm();
+
+    const onDelete = () => {
+        remove_chart(index)
+        setIsChartSettingsOpen(false)
+    }
+
+    const onSubmit = () => {
+        form.submit()
+        setIsChartSettingsOpen(false)
+    }
+
+    const onFormFinished = () => {
+        setIsChartSettingsOpen(false)
+    }
+
+    const onFilenameSelect = (value) => {
+        setSelectedFilename(value)
+    }
+
+    const generateListAndLabel = (file_list) => {
+        return file_list.map(file => ({
+            value: file,
+            label: file
+        }))
+    }
+
+    const select_options = generateListAndLabel(file_list)
     
     return (
         <Modal
             title={title}
             open={isChartSettingsOpen}
-            onCancel={() => {
-                setIsChartSettingsOpen(false)
-            }}
+            onCancel={() => setIsChartSettingsOpen(false)}
             footer={[
                 <Button
                     key="delete"
                     type="primary"
                     danger={true}
-                    onClick={() => {
-                        remove_chart(index)
-                        setIsChartSettingsOpen(false)
-                    }}
+                    onClick={onDelete}
                 >
                     Delete
                 </Button>,
@@ -45,10 +65,7 @@ const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettin
                     key="submit"
                     htmlType='submit'
                     type="primary"
-                    onClick={() => {
-                        form.submit()
-                        setIsChartSettingsOpen(false)
-                    }}
+                    onClick={onSubmit}
                 >
                     Submit
                 </Button>,
@@ -56,23 +73,17 @@ const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettin
         >
             <Form
                 form={form}
-                onFinish={(values) => {
-                    setIsChartSettingsOpen(false)
-                }}
+                onFinish={onFormFinished}
             >
                 <Form.Item
                     name={'filename'}
                     label={'Filename'}
                 >
                     <Select
-                        style={{ width: 120 }}
-                        options={file_list.map(file => ({
-                            value: file,
-                            label: file
-                        }))}
-                        onChange={(value) => {
-                            setSelectedFilename(value);
-                        }}
+                        options={select_options}
+                        onChange={onFilenameSelect}
+                        allowClear={true}
+                        showSearch={true}
                     />
                 </Form.Item>
             </Form>

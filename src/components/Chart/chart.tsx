@@ -5,6 +5,7 @@ import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import ChartOptions from './chart_options';
 import ChartSettings from '../ChartSettings';
+import styles from './chart.module.css'
 
 type ChartProps = {
     index: number,
@@ -39,27 +40,31 @@ const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: Chart
         }
     }, [selectedFilename])
 
+    const toggleChartSettings = () => {
+        setIsChartSettingsOpen(!isChartSettingsOpen)
+    }
+
     return (
         <Card
             actions={[
                 <SettingOutlined
                     key="setting"
-                    onClick={() => setIsChartSettingsOpen(!isChartSettingsOpen)}
+                    onClick={toggleChartSettings}
                 />,
               ]}
         >
             <ChartSettings
                 file_list={file_list}
                 isChartSettingsOpen={isChartSettingsOpen}
-                setIsChartSettingsOpen={setIsChartSettingsOpen}
+                setIsChartSettingsOpen={toggleChartSettings}
                 setSelectedFilename={setSelectedFilename}
-                title={selectedFilename}
+                title={selectedFilename ? selectedFilename : 'Create New Chart'}
                 index={index}
                 remove_chart={remove_chart}
             />
             <ReactECharts 
                 option={chartOptions}
-                style={{ height: 240 }}
+                className={styles.echarts}
                 notMerge={true}
             />
         </Card>

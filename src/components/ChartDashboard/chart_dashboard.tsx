@@ -38,7 +38,7 @@ const ChartDashboard = () => {
             component: <Chart
                 index={chart_list.length}
                 file_list={fileList}
-                is_chart_settings_open={true}
+                is_chart_settings_open={true} // NOTE: Always open when created for the first time.
                 remove_chart={_remove_chart}
             />
         }
@@ -61,9 +61,7 @@ const ChartDashboard = () => {
 
             <FloatButton
                 icon={<PlusOutlined />}
-                onClick={() => { 
-                    _create_chart()
-                }}
+                onClick={_create_chart}
             />
         </Space>
     );
