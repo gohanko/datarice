@@ -57,6 +57,7 @@ const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: Chart
                 file_list={file_list}
                 isChartSettingsOpen={isChartSettingsOpen}
                 setIsChartSettingsOpen={toggleChartSettings}
+                selectedFilename={selectedFilename}
                 setSelectedFilename={setSelectedFilename}
                 title={selectedFilename ? selectedFilename : 'Create New Chart'}
                 index={index}

@@ -4,7 +4,9 @@ import {
     Modal,
     Select,
     Typography,
-    Form
+    Form,
+    Collapse,
+    Divider
 } from 'antd';
 
 type ChartSettingsProps = {
@@ -12,12 +14,22 @@ type ChartSettingsProps = {
     file_list: Array<string>,
     isChartSettingsOpen: boolean,
     setIsChartSettingsOpen: Function,
+    selectedFilename: string,
     setSelectedFilename: Function,
     title: string,
     remove_chart: Function,
 }
 
-const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettingsOpen, setSelectedFilename, title, remove_chart }: ChartSettingsProps) => {
+const ChartSettings = ({
+    index,
+    file_list,
+    isChartSettingsOpen,
+    setIsChartSettingsOpen,
+    selectedFilename,
+    setSelectedFilename,
+    title,
+    remove_chart
+}: ChartSettingsProps) => {
     const [form] = Form.useForm();
 
     const onDelete = () => {
@@ -46,7 +58,7 @@ const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettin
     }
 
     const select_options = generateListAndLabel(file_list)
-    
+
     return (
         <Modal
             title={title}
@@ -86,6 +98,17 @@ const ChartSettings = ({ index, file_list, isChartSettingsOpen, setIsChartSettin
                         showSearch={true}
                     />
                 </Form.Item>
+                { selectedFilename &&
+                    <Form.Item>
+                        <Divider
+                            orientation='left'
+                            orientationMargin={0}
+                            plain
+                        >
+                            Chart Settings
+                        </Divider>
+                    </Form.Item>
+                }
             </Form>
         </Modal>
     )
