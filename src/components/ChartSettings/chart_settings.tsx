@@ -10,7 +10,7 @@ import {
 } from 'antd';
 
 type ChartSettingsProps = {
-    index: number,
+    chart_id: number,
     file_list: Array<string>,
     isChartSettingsOpen: boolean,
     setIsChartSettingsOpen: Function,
@@ -21,7 +21,7 @@ type ChartSettingsProps = {
 }
 
 const ChartSettings = ({
-    index,
+    chart_id,
     file_list,
     isChartSettingsOpen,
     setIsChartSettingsOpen,
@@ -33,8 +33,16 @@ const ChartSettings = ({
     const [form] = Form.useForm();
 
     const onDelete = () => {
-        remove_chart(index)
+        remove_chart(chart_id)
         setIsChartSettingsOpen(false)
+    }
+
+    const onCancel = () => {
+        if (!selectedFilename) {
+            remove_chart(chart_id)
+        } else {
+            setIsChartSettingsOpen(false)
+        }
     }
 
     const onSubmit = () => {
@@ -63,7 +71,7 @@ const ChartSettings = ({
         <Modal
             title={title}
             open={isChartSettingsOpen}
-            onCancel={() => setIsChartSettingsOpen(false)}
+            onCancel={onCancel}
             footer={[
                 <Button
                     key="delete"

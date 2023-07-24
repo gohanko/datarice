@@ -8,13 +8,13 @@ import ChartSettings from '../ChartSettings';
 import styles from './chart.module.css'
 
 type ChartProps = {
-    index: number,
+    chart_id: number,
     file_list: Array<string>
     is_chart_settings_open: boolean,
     remove_chart: Function,
 }
 
-const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: ChartProps) => {
+const Chart = ({ chart_id, file_list, is_chart_settings_open, remove_chart }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
     const [selectedFilename, setSelectedFilename] = useState()
     const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(is_chart_settings_open);
@@ -40,9 +40,7 @@ const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: Chart
         }
     }, [selectedFilename])
 
-    const toggleChartSettings = () => {
-        setIsChartSettingsOpen(!isChartSettingsOpen)
-    }
+    const toggleChartSettings = () => setIsChartSettingsOpen(!isChartSettingsOpen)
 
     return (
         <Card
@@ -60,7 +58,7 @@ const Chart = ({ index, file_list, is_chart_settings_open, remove_chart }: Chart
                 selectedFilename={selectedFilename}
                 setSelectedFilename={setSelectedFilename}
                 title={selectedFilename ? selectedFilename : 'Create New Chart'}
-                index={index}
+                chart_id={chart_id}
                 remove_chart={remove_chart}
             />
             <ReactECharts 
