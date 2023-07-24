@@ -10,17 +10,18 @@ import { DEFAULT_CHART_OPTIONS, SUPPORTED_CHART_TYPES } from "../../common/const
 
 
 type ChartProps = {
-    chart_id: number,
+    chart_id: number
     file_list: Array<string>
-    is_settings_open: boolean,
-    remove_chart: Function,
+    is_settings_open: boolean
+    // eslint-disable-next-line no-unused-vars
+    removeChart: (chart_id: number) => void;
 }
 
 const Chart = ({
     chart_id,
     file_list,
     is_settings_open,
-    remove_chart
+    removeChart
 }: ChartProps) => {
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [selectedFilename, setSelectedFilename] = useState()
@@ -48,13 +49,13 @@ const Chart = ({
             ...chartOption,
             ...chart_option_manager.getOption(),
         }))
-    }, [rawData])
+    }, [rawData, chart_option_manager, chartType])
 
     useEffect(() => {
         if (selectedFilename) {
             socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
         }
-    }, [selectedFilename])
+    }, [selectedFilename, socket])
 
     useEffect(() => {
         chart_option_manager.setOption(rawData.filename, chartType, rawData['data'])
@@ -63,7 +64,7 @@ const Chart = ({
             ...chartOption,
             ...chart_option_manager.getOption(),
         }))
-    }, [chartType])
+    }, [chartType, chart_option_manager, rawData])
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
@@ -74,7 +75,7 @@ const Chart = ({
                     key="setting"
                     onClick={toggleChartSettings}
                 />,
-              ]}
+            ]}
         >
             <ChartSettings
                 chart_id={chart_id}
@@ -86,7 +87,7 @@ const Chart = ({
                 chartType={chartType}
                 setChartType={setChartType}
                 title={selectedFilename ? selectedFilename : 'Create New Chart'}
-                remove_chart={remove_chart}
+                removeChart={removeChart}
             />
             <ReactECharts 
                 option={chartOption}

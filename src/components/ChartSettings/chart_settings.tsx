@@ -12,13 +12,14 @@ type ChartSettingsProps = {
     chart_id: number,
     file_list: Array<string>,
     isSettingsOpen: boolean,
-    setIsSettingsOpen: Function,
+    setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     selectedFilename: string,
-    setSelectedFilename: Function,
+    setSelectedFilename: React.Dispatch<React.SetStateAction<string>>,
     chartType,
     setChartType,
     title: string,
-    remove_chart: Function,
+    // eslint-disable-next-line no-unused-vars
+    removeChart: (chart_id: number) => void,
 }
 
 const ChartSettings = ({
@@ -31,18 +32,18 @@ const ChartSettings = ({
     chartType,
     setChartType,
     title,
-    remove_chart
+    removeChart
 }: ChartSettingsProps) => {
     const [form] = Form.useForm();
 
     const onDelete = () => {
-        remove_chart(chart_id)
+        removeChart(chart_id)
         setIsSettingsOpen(false)
     }
 
     const onCancel = () => {
         if (!selectedFilename) {
-            remove_chart(chart_id)
+            removeChart(chart_id)
         } else {
             setIsSettingsOpen(false)
         }

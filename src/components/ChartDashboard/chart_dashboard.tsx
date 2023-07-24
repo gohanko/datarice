@@ -39,7 +39,7 @@ const ChartDashboard = () => {
                 chart_id={chart_list.length}
                 file_list={fileList}
                 is_settings_open={true} // NOTE: Always open when created for the first time.
-                remove_chart={_remove_chart}
+                removeChart={_removeChart}
             />
         }
 
@@ -47,7 +47,7 @@ const ChartDashboard = () => {
         setChartList(chart_list)
     }
 
-    const _remove_chart = (index) => {
+    const _removeChart = (index) => {
         const chart_list: ChartObject[] = [...chartList]
         chart_list.splice(index, 1)
         setChartList(chart_list)

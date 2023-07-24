@@ -19,7 +19,7 @@ const read_data_file = (filename) => {
 
     const raw_data = fs.readFileSync(filename, 'utf-8')
 
-    var parsed_data = []
+    let parsed_data = []
     switch(extension) {
     case SUPPORTED_FILE_FORMAT[0]:
     case SUPPORTED_FILE_FORMAT[1]:
