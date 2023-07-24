@@ -10,14 +10,19 @@ import styles from './chart.module.css'
 type ChartProps = {
     chart_id: number,
     file_list: Array<string>
-    is_chart_settings_open: boolean,
+    is_settings_open: boolean,
     remove_chart: Function,
 }
 
-const Chart = ({ chart_id, file_list, is_chart_settings_open, remove_chart }: ChartProps) => {
+const Chart = ({
+    chart_id,
+    file_list,
+    is_settings_open,
+    remove_chart
+}: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
     const [selectedFilename, setSelectedFilename] = useState()
-    const [isSettingsOpen, setIsSettingsOpen] = useState(is_chart_settings_open);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);
 
     const chart_options = ChartOptions()
     const socket = io();

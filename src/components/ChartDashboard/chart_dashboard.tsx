@@ -36,9 +36,9 @@ const ChartDashboard = () => {
             type: 'line',
             size: DEFAULT_CHART_TYPE_SIZES['line'],
             component: <Chart
-                index={chart_list.length}
+                chart_id={chart_list.length}
                 file_list={fileList}
-                is_chart_settings_open={true} // NOTE: Always open when created for the first time.
+                is_settings_open={true} // NOTE: Always open when created for the first time.
                 remove_chart={_remove_chart}
             />
         }
