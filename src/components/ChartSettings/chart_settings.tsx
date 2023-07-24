@@ -12,8 +12,8 @@ import {
 type ChartSettingsProps = {
     chart_id: number,
     file_list: Array<string>,
-    isChartSettingsOpen: boolean,
-    setIsChartSettingsOpen: Function,
+    isSettingsOpen: boolean,
+    setIsSettingsOpen: Function,
     selectedFilename: string,
     setSelectedFilename: Function,
     title: string,
@@ -23,8 +23,8 @@ type ChartSettingsProps = {
 const ChartSettings = ({
     chart_id,
     file_list,
-    isChartSettingsOpen,
-    setIsChartSettingsOpen,
+    isSettingsOpen,
+    setIsSettingsOpen,
     selectedFilename,
     setSelectedFilename,
     title,
@@ -34,24 +34,24 @@ const ChartSettings = ({
 
     const onDelete = () => {
         remove_chart(chart_id)
-        setIsChartSettingsOpen(false)
+        setIsSettingsOpen(false)
     }
 
     const onCancel = () => {
         if (!selectedFilename) {
             remove_chart(chart_id)
         } else {
-            setIsChartSettingsOpen(false)
+            setIsSettingsOpen(false)
         }
     }
 
     const onSubmit = () => {
         form.submit()
-        setIsChartSettingsOpen(false)
+        setIsSettingsOpen(false)
     }
 
     const onFormFinished = () => {
-        setIsChartSettingsOpen(false)
+        setIsSettingsOpen(false)
     }
 
     const onFilenameSelect = (value) => {
@@ -70,7 +70,7 @@ const ChartSettings = ({
     return (
         <Modal
             title={title}
-            open={isChartSettingsOpen}
+            open={isSettingsOpen}
             onCancel={onCancel}
             footer={[
                 <Button

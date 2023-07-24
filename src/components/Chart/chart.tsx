@@ -17,7 +17,7 @@ type ChartProps = {
 const Chart = ({ chart_id, file_list, is_chart_settings_open, remove_chart }: ChartProps) => {
     const [chartOptions, setChartOptions] = useState({});
     const [selectedFilename, setSelectedFilename] = useState()
-    const [isChartSettingsOpen, setIsChartSettingsOpen] = useState(is_chart_settings_open);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(is_chart_settings_open);
 
     const chart_options = ChartOptions()
     const socket = io();
@@ -40,7 +40,7 @@ const Chart = ({ chart_id, file_list, is_chart_settings_open, remove_chart }: Ch
         }
     }, [selectedFilename])
 
-    const toggleChartSettings = () => setIsChartSettingsOpen(!isChartSettingsOpen)
+    const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
     return (
         <Card
@@ -53,8 +53,8 @@ const Chart = ({ chart_id, file_list, is_chart_settings_open, remove_chart }: Ch
         >
             <ChartSettings
                 file_list={file_list}
-                isChartSettingsOpen={isChartSettingsOpen}
-                setIsChartSettingsOpen={toggleChartSettings}
+                isSettingsOpen={isSettingsOpen}
+                setIsSettingsOpen={toggleChartSettings}
                 selectedFilename={selectedFilename}
                 setSelectedFilename={setSelectedFilename}
                 title={selectedFilename ? selectedFilename : 'Create New Chart'}
