@@ -3,9 +3,11 @@ import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import ChartOptions from './chart_options';
+import ChartOptionManager from './chart_option_manager';
 import ChartSettings from '../ChartSettings';
 import styles from './chart.module.css'
+import { DEFAULT_CHART_OPTIONS, SUPPORTED_CHART_TYPES } from "../../common/constants"
+
 
 type ChartProps = {
     chart_id: number,
@@ -20,11 +22,12 @@ const Chart = ({
     is_settings_open,
     remove_chart
 }: ChartProps) => {
-    const [chartOptions, setChartOptions] = useState({});
+    const [ChartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [selectedFilename, setSelectedFilename] = useState()
     const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);
+    const [chartType, setChartType] = useState(SUPPORTED_CHART_TYPES['0'])
 
-    const chart_options = ChartOptions()
+    const chart_option_manager = ChartOptionManager()
     const socket = io();
 
     socket.on('load-data-from-data-file', (data) => {
@@ -32,10 +35,10 @@ const Chart = ({
             return
         }
 
-        const options = chart_options.get_options(data)
-        setChartOptions(chartOptions => ({
-            ...chartOptions,
-            ...options,
+        chart_option_manager.setOption(data['filename'], data['data'], chartType)
+        setChartOption(ChartOption => ({
+            ...ChartOption,
+            ...chart_option_manager.getOption(),
         }))
     })
 
@@ -57,17 +60,17 @@ const Chart = ({
               ]}
         >
             <ChartSettings
+                chart_id={chart_id}
                 file_list={file_list}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
                 selectedFilename={selectedFilename}
                 setSelectedFilename={setSelectedFilename}
                 title={selectedFilename ? selectedFilename : 'Create New Chart'}
-                chart_id={chart_id}
                 remove_chart={remove_chart}
             />
             <ReactECharts 
-                option={chartOptions}
+                option={ChartOption}
                 className={styles.echarts}
                 notMerge={true}
             />

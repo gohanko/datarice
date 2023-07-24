@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
     Button,
     Modal,
     Select,
-    Typography,
     Form,
-    Collapse,
     Divider
 } from 'antd';
 import { SUPPORTED_CHART_TYPES } from '../../common/constants';
