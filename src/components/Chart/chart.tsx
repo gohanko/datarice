@@ -49,13 +49,13 @@ const Chart = ({
             ...chartOption,
             ...chart_option_manager.getOption(),
         }))
-    }, [rawData, chart_option_manager, chartType])
+    }, [rawData])
 
     useEffect(() => {
         if (selectedFilename) {
             socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
         }
-    }, [selectedFilename, socket])
+    }, [selectedFilename])
 
     useEffect(() => {
         chart_option_manager.setOption(rawData.filename, chartType, rawData['data'])
@@ -64,7 +64,7 @@ const Chart = ({
             ...chartOption,
             ...chart_option_manager.getOption(),
         }))
-    }, [chartType, chart_option_manager, rawData])
+    }, [chartType])
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
