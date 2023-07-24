@@ -15,6 +15,8 @@ type ChartSettingsProps = {
     setIsSettingsOpen: Function,
     selectedFilename: string,
     setSelectedFilename: Function,
+    chartType,
+    setChartType,
     title: string,
     remove_chart: Function,
 }
@@ -26,6 +28,8 @@ const ChartSettings = ({
     setIsSettingsOpen,
     selectedFilename,
     setSelectedFilename,
+    chartType,
+    setChartType,
     title,
     remove_chart
 }: ChartSettingsProps) => {
@@ -47,20 +51,28 @@ const ChartSettings = ({
     const onSubmit = () => form.submit()
 
     const onFormFinished = (form_value) => {
-        console.log(form_value)
-        setSelectedFilename(form_value['filename'])
+        const filename = form_value?.filename
+        if (filename) {
+            setSelectedFilename(filename)
+        }
+
+        const chart_type = form_value?.chart_type
+        if (chart_type) {
+            setChartType(chart_type)
+        }
+
         setIsSettingsOpen(false)
     }
 
-    const generateListAndLabel = (values) => {
+    const generateListAndLabel = (values, capitalise_label=false) => {
         return values.map(value => ({
             value: value,
-            label: value
+            label: capitalise_label ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : value
         }))
     }
 
     const select_options = generateListAndLabel(file_list)
-    const chart_type_options = generateListAndLabel(SUPPORTED_CHART_TYPES)
+    const chart_type_options = generateListAndLabel(SUPPORTED_CHART_TYPES, true)
 
     return (
         <Modal
@@ -89,6 +101,9 @@ const ChartSettings = ({
             <Form
                 form={form}
                 onFinish={onFormFinished}
+                initialValues={{
+                    ["chart_type"]: chartType
+                }}
             >
                 <Form.Item
                     name={'filename'}

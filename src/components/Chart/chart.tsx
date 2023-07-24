@@ -22,8 +22,12 @@ const Chart = ({
     is_settings_open,
     remove_chart
 }: ChartProps) => {
-    const [ChartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
+    const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [selectedFilename, setSelectedFilename] = useState()
+    const [rawData, setRawData] = useState({
+        filename: '',
+        data: []
+    })
     const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);
     const [chartType, setChartType] = useState(SUPPORTED_CHART_TYPES['0'])
 
@@ -35,18 +39,31 @@ const Chart = ({
             return
         }
 
-        chart_option_manager.setOption(data['filename'], data['data'], chartType)
-        setChartOption(ChartOption => ({
-            ...ChartOption,
+        setRawData(data)
+    })
+
+    useEffect(() => {
+        chart_option_manager.setOption(rawData['filename'], chartType, rawData['data'])
+        setChartOption(chartOption => ({
+            ...chartOption,
             ...chart_option_manager.getOption(),
         }))
-    })
+    }, [rawData])
 
     useEffect(() => {
         if (selectedFilename) {
             socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
         }
     }, [selectedFilename])
+
+    useEffect(() => {
+        chart_option_manager.setOption(rawData.filename, chartType, rawData['data'])
+
+        setChartOption(chartOption => ({
+            ...chartOption,
+            ...chart_option_manager.getOption(),
+        }))
+    }, [chartType])
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
@@ -66,11 +83,13 @@ const Chart = ({
                 setIsSettingsOpen={toggleChartSettings}
                 selectedFilename={selectedFilename}
                 setSelectedFilename={setSelectedFilename}
+                chartType={chartType}
+                setChartType={setChartType}
                 title={selectedFilename ? selectedFilename : 'Create New Chart'}
                 remove_chart={remove_chart}
             />
             <ReactECharts 
-                option={ChartOption}
+                option={chartOption}
                 className={styles.echarts}
                 notMerge={true}
             />

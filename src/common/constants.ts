@@ -14,8 +14,6 @@ const DEFAULT_CHART_OPTIONS = {
             magicType: {
                 show: true,
                 type: [
-                    'line',
-                    'bar',
                     'stack',
                 ]
             },
@@ -36,11 +34,11 @@ const SUPPORTED_CHART_TYPES = [
     'pie',
     'scatter',
     'effectScatter',
-    'parallel',
-    'candlestick',
-    'map',
+    //'parallel',
+    //'candlestick',
+    //'map',
     'funnel',
-    'custom'
+    //'custom'
 ]
 
 export {

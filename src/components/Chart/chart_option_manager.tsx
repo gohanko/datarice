@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 const ChartOptionManager = () => {
     let title = ''
     let dataset = []
+    let series = []
     let chart_type = ''
 
     /**
@@ -41,16 +42,25 @@ const ChartOptionManager = () => {
 
     const setDataset = (new_data) => {
         dataset = _convertDataTo2DTable(new_data)
+        if (dataset.length == 0) {
+            series = []
+        } else {
+            series = dataset[0].map(() => ({
+                type: chart_type
+            }))
+        }
+
+
     }
 
     const setTitle = (new_title) => {
         title = new_title
     }
 
-    const setOption = (new_title, new_data, new_chart_type) => {
+    const setOption = (new_title, new_chart_type, new_data) => {
         setTitle(new_title)
-        setDataset(new_data),
         setChartType(new_chart_type)
+        setDataset(new_data)
     }
 
     const getOption = () => {
@@ -79,9 +89,7 @@ const ChartOptionManager = () => {
             yAxis: {
                 min: 24
             },
-            series: [...Array(dataset[0].length - 1)].map(() => ({
-                type: chart_type
-            }))
+            series: series
         }
 
         return option
