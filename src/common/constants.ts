@@ -30,7 +30,7 @@ const DEFAULT_CHART_OPTIONS = {
     },
 }
 
-const SUPPORT_CHART_TYPES = [
+const SUPPORTED_CHART_TYPES = [
     'line',
     'bar',
     'pie',
@@ -47,5 +47,5 @@ export {
     DATA_STORE_DIRECTORY,
     DEFAULT_CHART_TYPE_SIZES,
     DEFAULT_CHART_OPTIONS,
-    SUPPORT_CHART_TYPES
+    SUPPORTED_CHART_TYPES
 };

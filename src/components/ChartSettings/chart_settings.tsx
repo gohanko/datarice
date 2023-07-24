@@ -8,6 +8,7 @@ import {
     Collapse,
     Divider
 } from 'antd';
+import { SUPPORTED_CHART_TYPES } from '../../common/constants';
 
 type ChartSettingsProps = {
     chart_id: number,
@@ -45,27 +46,23 @@ const ChartSettings = ({
         }
     }
 
-    const onSubmit = () => {
-        form.submit()
+    const onSubmit = () => form.submit()
+
+    const onFormFinished = (form_value) => {
+        console.log(form_value)
+        setSelectedFilename(form_value['filename'])
         setIsSettingsOpen(false)
     }
 
-    const onFormFinished = () => {
-        setIsSettingsOpen(false)
-    }
-
-    const onFilenameSelect = (value) => {
-        setSelectedFilename(value)
-    }
-
-    const generateListAndLabel = (file_list) => {
-        return file_list.map(file => ({
-            value: file,
-            label: file
+    const generateListAndLabel = (values) => {
+        return values.map(value => ({
+            value: value,
+            label: value
         }))
     }
 
     const select_options = generateListAndLabel(file_list)
+    const chart_type_options = generateListAndLabel(SUPPORTED_CHART_TYPES)
 
     return (
         <Modal
@@ -101,13 +98,12 @@ const ChartSettings = ({
                 >
                     <Select
                         options={select_options}
-                        onChange={onFilenameSelect}
                         allowClear={true}
                         showSearch={true}
                     />
                 </Form.Item>
                 { selectedFilename &&
-                    <Form.Item>
+                    <React.Fragment>
                         <Divider
                             orientation='left'
                             orientationMargin={0}
@@ -115,7 +111,15 @@ const ChartSettings = ({
                         >
                             Chart Settings
                         </Divider>
-                    </Form.Item>
+                        <Form.Item
+                            name={'chart_type'}
+                            label={'Chart Type'}
+                        >
+                            <Select
+                                options={chart_type_options}
+                            />
+                        </Form.Item>
+                    </React.Fragment>
                 }
             </Form>
         </Modal>
