@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Space, Col, Row, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { io } from "socket.io-client";
 import Chart from '../Chart';
 import useChartList from '../../stores/chart_list';
+import useFileList from '../../stores/file_list';
 
 const ChartDashboard = () => {
     const {
@@ -11,7 +12,7 @@ const ChartDashboard = () => {
         addChart,
     } = useChartList()
 
-    const [fileList, setFileList] = useState([])
+    const setFileList = useFileList((state) => state.setFileList)
     
     useEffect(() => {
         fetch('/api/temperature_data').finally(() => {
@@ -28,7 +29,10 @@ const ChartDashboard = () => {
     }, [])
     
     const handleOnClickFloat = () => {
-        addChart({data_url: 'https://google.com', column_size: 12})
+        addChart({
+            data_url: '', 
+            column_size: 12
+        })
     }
 
     return (
@@ -38,7 +42,6 @@ const ChartDashboard = () => {
                     return <Col span={chart.column_size} key={index}>
                         <Chart
                             chart_id={chart.id}
-                            file_list={fileList}
                             is_settings_open={true}
                         />
                     </Col>

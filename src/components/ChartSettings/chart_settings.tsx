@@ -8,10 +8,10 @@ import {
 } from 'antd';
 import { SUPPORTED_CHART_TYPES } from '../../common/constants';
 import useChartList from '../../stores/chart_list';
+import useFileList from '../../stores/file_list';
 
 type ChartSettingsProps = {
     chart_id: number,
-    file_list: Array<string>,
     isSettingsOpen: boolean,
     setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     selectedFilename: string,
@@ -23,7 +23,6 @@ type ChartSettingsProps = {
 
 const ChartSettings = ({
     chart_id,
-    file_list,
     isSettingsOpen,
     setIsSettingsOpen,
     selectedFilename,
@@ -34,6 +33,7 @@ const ChartSettings = ({
 }: ChartSettingsProps) => {
     const [form] = Form.useForm();
     const removeChart = useChartList((state) => state.removeChart)
+    const file_list = useFileList((state) => state.file_list)
 
     const onDelete = () => {
         removeChart(chart_id)

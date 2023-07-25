@@ -11,13 +11,11 @@ import { DEFAULT_CHART_OPTIONS, SUPPORTED_CHART_TYPES } from "../../common/const
 
 type ChartProps = {
     chart_id: number
-    file_list: Array<string>
     is_settings_open: boolean
 }
 
 const Chart = ({
     chart_id,
-    file_list,
     is_settings_open,
 }: ChartProps) => {
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
@@ -76,7 +74,6 @@ const Chart = ({
         >
             <ChartSettings
                 chart_id={chart_id}
-                file_list={file_list}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
                 selectedFilename={selectedFilename}
