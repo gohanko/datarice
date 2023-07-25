@@ -12,7 +12,7 @@ interface ChartListState {
     // eslint-disable-next-line no-unused-vars
     addChart: (chart: ChartState) => void
     // eslint-disable-next-line no-unused-vars
-    setDataURL: (id: number, data_url: number) => void
+    setDataURL: (id: number, data_url: string) => void
     // eslint-disable-next-line no-unused-vars
     removeChart: (id: number) => void
 }
