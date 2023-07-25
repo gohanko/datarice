@@ -7,6 +7,7 @@ import {
     Divider
 } from 'antd';
 import { SUPPORTED_CHART_TYPES } from '../../common/constants';
+import useChartList from '../../stores/chart_list';
 
 type ChartSettingsProps = {
     chart_id: number,
@@ -18,8 +19,6 @@ type ChartSettingsProps = {
     chartType,
     setChartType,
     title: string,
-    // eslint-disable-next-line no-unused-vars
-    removeChart: (chart_id: number) => void,
 }
 
 const ChartSettings = ({
@@ -32,9 +31,9 @@ const ChartSettings = ({
     chartType,
     setChartType,
     title,
-    removeChart
 }: ChartSettingsProps) => {
     const [form] = Form.useForm();
+    const removeChart = useChartList((state) => state.removeChart)
 
     const onDelete = () => {
         removeChart(chart_id)

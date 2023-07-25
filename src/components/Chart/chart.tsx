@@ -13,15 +13,12 @@ type ChartProps = {
     chart_id: number
     file_list: Array<string>
     is_settings_open: boolean
-    // eslint-disable-next-line no-unused-vars
-    removeChart: (chart_id: number) => void;
 }
 
 const Chart = ({
     chart_id,
     file_list,
     is_settings_open,
-    removeChart
 }: ChartProps) => {
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [selectedFilename, setSelectedFilename] = useState()
@@ -87,7 +84,6 @@ const Chart = ({
                 chartType={chartType}
                 setChartType={setChartType}
                 title={selectedFilename ? selectedFilename : 'Create New Chart'}
-                removeChart={removeChart}
             />
             <ReactECharts 
                 option={chartOption}
