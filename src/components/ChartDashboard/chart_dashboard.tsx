@@ -42,7 +42,8 @@ const ChartDashboard = () => {
                     return <Col span={chart.column_size} key={index}>
                         <Chart
                             chart_id={chart.id}
-                            is_settings_open={true}
+                            is_settings_open={false}
+                            data_url={chart.data_url}
                         />
                     </Col>
                 })}

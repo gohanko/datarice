@@ -12,6 +12,8 @@ interface ChartListState {
     // eslint-disable-next-line no-unused-vars
     addChart: (chart: ChartState) => void
     // eslint-disable-next-line no-unused-vars
+    setDataURL: (id: number, data_url: number) => void
+    // eslint-disable-next-line no-unused-vars
     removeChart: (id: number) => void
 }
 
@@ -29,6 +31,16 @@ const useChartList = create<ChartListState>()(
 
                     return {
                         chart_list: [...state.chart_list, new_chart]
+                    }
+                }),
+                setDataURL: (id: number, data_url: string) => set((state: ChartListState) => {
+                    const index = state.chart_list.findIndex((chart) => chart.id == id)
+
+                    const new_chart_list = state.chart_list
+                    new_chart_list[index].data_url = data_url
+
+                    return {
+                        chart_list: new_chart_list
                     }
                 }),
                 removeChart: (id: number) => set((state: ChartListState) => {

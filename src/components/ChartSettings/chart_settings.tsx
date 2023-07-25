@@ -14,8 +14,7 @@ type ChartSettingsProps = {
     chart_id: number,
     isSettingsOpen: boolean,
     setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    selectedFilename: string,
-    setSelectedFilename: React.Dispatch<React.SetStateAction<string>>,
+    data_url: string,
     chartType,
     setChartType,
     title: string,
@@ -25,13 +24,13 @@ const ChartSettings = ({
     chart_id,
     isSettingsOpen,
     setIsSettingsOpen,
-    selectedFilename,
-    setSelectedFilename,
+    data_url,
     chartType,
     setChartType,
     title,
 }: ChartSettingsProps) => {
     const [form] = Form.useForm();
+    const setDataURL = useChartList((state) => state.setDataURL)
     const removeChart = useChartList((state) => state.removeChart)
     const file_list = useFileList((state) => state.file_list)
 
@@ -41,7 +40,7 @@ const ChartSettings = ({
     }
 
     const onCancel = () => {
-        if (!selectedFilename) {
+        if (!data_url) {
             removeChart(chart_id)
         } else {
             setIsSettingsOpen(false)
@@ -53,7 +52,7 @@ const ChartSettings = ({
     const onFormFinished = (form_value) => {
         const filename = form_value?.filename
         if (filename) {
-            setSelectedFilename(filename)
+            setDataURL(chart_id, filename)
         }
 
         const chart_type = form_value?.chart_type
@@ -102,6 +101,7 @@ const ChartSettings = ({
                 form={form}
                 onFinish={onFormFinished}
                 initialValues={{
+                    ["filename"]: data_url,
                     ["chart_type"]: chartType
                 }}
             >
@@ -115,7 +115,7 @@ const ChartSettings = ({
                         showSearch={true}
                     />
                 </Form.Item>
-                { selectedFilename &&
+                { data_url &&
                     <React.Fragment>
                         <Divider
                             orientation='left'

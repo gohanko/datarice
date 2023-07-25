@@ -11,15 +11,16 @@ import { DEFAULT_CHART_OPTIONS, SUPPORTED_CHART_TYPES } from "../../common/const
 
 type ChartProps = {
     chart_id: number
+    data_url: string
     is_settings_open: boolean
 }
 
 const Chart = ({
     chart_id,
+    data_url,
     is_settings_open,
 }: ChartProps) => {
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
-    const [selectedFilename, setSelectedFilename] = useState()
     const [rawData, setRawData] = useState({
         filename: '',
         data: []
@@ -31,7 +32,7 @@ const Chart = ({
     const socket = io();
 
     socket.on('load-data-from-data-file', (data) => {
-        if (data.filename != selectedFilename) {
+        if (data.filename != data_url) {
             return
         }
 
@@ -47,10 +48,10 @@ const Chart = ({
     }, [rawData])
 
     useEffect(() => {
-        if (selectedFilename) {
-            socket.emit('load-data-from-data-file', JSON.stringify({ filename: selectedFilename }));
+        if (data_url) {
+            socket.emit('load-data-from-data-file', JSON.stringify({ filename: data_url }));
         }
-    }, [selectedFilename])
+    }, [data_url])
 
     useEffect(() => {
         chart_option_manager.setOption(rawData.filename, chartType, rawData['data'])
@@ -76,11 +77,10 @@ const Chart = ({
                 chart_id={chart_id}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
-                selectedFilename={selectedFilename}
-                setSelectedFilename={setSelectedFilename}
+                data_url={data_url}
                 chartType={chartType}
                 setChartType={setChartType}
-                title={selectedFilename ? selectedFilename : 'Create New Chart'}
+                title={data_url ? data_url : 'Create New Chart'}
             />
             <ReactECharts 
                 option={chartOption}
