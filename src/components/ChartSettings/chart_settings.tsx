@@ -15,8 +15,7 @@ type ChartSettingsProps = {
     isSettingsOpen: boolean,
     setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     data_url: string,
-    chartType,
-    setChartType,
+    chartType: string,
     title: string,
 }
 
@@ -26,12 +25,12 @@ const ChartSettings = ({
     setIsSettingsOpen,
     data_url,
     chartType,
-    setChartType,
     title,
 }: ChartSettingsProps) => {
     const [form] = Form.useForm();
     const setDataURL = useChartList((state) => state.setDataURL)
     const removeChart = useChartList((state) => state.removeChart)
+    const setChartType = useChartList((state) => state.setChartType)
     const file_list = useFileList((state) => state.file_list)
 
     const onDelete = () => {
@@ -57,7 +56,7 @@ const ChartSettings = ({
 
         const chart_type = form_value?.chart_type
         if (chart_type) {
-            setChartType(chart_type)
+            setChartType(chart_id, chart_type)
         }
 
         setIsSettingsOpen(false)

@@ -6,18 +6,19 @@ import { SettingOutlined } from '@ant-design/icons';
 import ChartOptionManager from '../EChartOptionManager';
 import ChartSettings from '../ChartSettings';
 import styles from './chart.module.css'
-import { DEFAULT_CHART_OPTIONS, SUPPORTED_CHART_TYPES } from "../../common/constants"
-
+import { DEFAULT_CHART_OPTIONS } from "../../common/constants"
 
 type ChartProps = {
     chart_id: number
     data_url: string
+    chart_type: string
     is_settings_open: boolean
 }
 
 const Chart = ({
     chart_id,
     data_url,
+    chart_type,
     is_settings_open,
 }: ChartProps) => {
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
@@ -25,9 +26,7 @@ const Chart = ({
         filename: '',
         data: []
     })
-    const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);
-    const [chartType, setChartType] = useState(SUPPORTED_CHART_TYPES['0'])
-
+    const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);    
     const chart_option_manager = ChartOptionManager()
     const socket = io();
 
@@ -40,7 +39,7 @@ const Chart = ({
     })
 
     useEffect(() => {
-        chart_option_manager.setOption(rawData['filename'], chartType, rawData['data'])
+        chart_option_manager.setOption(rawData['filename'], chart_type, rawData['data'])
         setChartOption(chartOption => ({
             ...chartOption,
             ...chart_option_manager.getOption(),
@@ -54,13 +53,13 @@ const Chart = ({
     }, [data_url])
 
     useEffect(() => {
-        chart_option_manager.setOption(rawData.filename, chartType, rawData['data'])
+        chart_option_manager.setOption(rawData.filename, chart_type, rawData['data'])
 
         setChartOption(chartOption => ({
             ...chartOption,
             ...chart_option_manager.getOption(),
         }))
-    }, [chartType])
+    }, [chart_type])
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
@@ -78,8 +77,7 @@ const Chart = ({
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
                 data_url={data_url}
-                chartType={chartType}
-                setChartType={setChartType}
+                chartType={chart_type}
                 title={data_url ? data_url : 'Create New Chart'}
             />
             <ReactECharts 

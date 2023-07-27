@@ -39,9 +39,11 @@ const ChartDashboard = () => {
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Row gutter={[16, 16]}>
                 { chart_list.map((chart, index) => {
+                    console.log(chart)
                     return <Col span={chart.column_size} key={index}>
                         <Chart
                             chart_id={chart.id}
+                            chart_type={chart.chart_setting.chart_type}
                             is_settings_open={false}
                             data_url={chart.data_url}
                         />
