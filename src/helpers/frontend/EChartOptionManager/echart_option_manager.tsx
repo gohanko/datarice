@@ -1,7 +1,8 @@
 import {
     DEFAULT_CHART_OPTIONS,
     SUPPORTED_CHART_TYPES,
-} from "../../common/constants"
+} from "../../../common/constants";
+import DataParsing from "../data_parsing";
 import dayjs from 'dayjs';
 
 const ChartOptionManager = () => {
@@ -9,28 +10,6 @@ const ChartOptionManager = () => {
     let dataset = []
     let series = []
     let chart_type = ''
-
-    /**
-     * Converts data to a 2D table.
-     */
-    const _convertDataTo2DTable = (data) => {
-        const dataset = []
-        dataset.push(Object.keys(data))
-
-        const rows = []
-        Object.keys(data).forEach((key) => {
-            data[key].forEach((value, index) => {
-                if (!rows[index]) {
-                    rows[index] = []
-                }
-
-                rows[index].push(value)
-            })
-        })
-
-        dataset.push(...rows)
-        return dataset
-    }
 
     const setChartType = (new_chart_type) => {
         if (!SUPPORTED_CHART_TYPES.includes(new_chart_type)) {
@@ -41,7 +20,8 @@ const ChartOptionManager = () => {
     }
 
     const setDataset = (new_data) => {
-        dataset = _convertDataTo2DTable(new_data)
+        dataset = DataParsing.parseData(new_data)
+        console.log(dataset)
         if (dataset.length == 0) {
             series = []
         } else {
@@ -49,8 +29,6 @@ const ChartOptionManager = () => {
                 type: chart_type
             }))
         }
-
-
     }
 
     const setTitle = (new_title) => {

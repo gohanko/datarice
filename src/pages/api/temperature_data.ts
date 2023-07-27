@@ -1,6 +1,6 @@
 import path from 'path';
 import { Server } from 'socket.io';
-import { FileManagerBackend } from '../../common/utility';
+import { FileManagerBackend } from '../../helpers/backend/disk_operations';
 import { DATA_STORE_DIRECTORY } from '../../common/constants';
 
 const TemperatureDataSocketHandler = (req, res) => {
@@ -28,16 +28,15 @@ const TemperatureDataSocketHandler = (req, res) => {
             const packet = JSON.parse(data)
 
             const emit_content = (content) => {
-                content['filename'] = packet.filename
                 socket.broadcast.emit('load-data-from-data-file', content)
             }
 
-            if (!packet['filename']) {
-                emit_content('ERROR: Filename is needed!')
+            if (!packet?.data_url) {
+                emit_content({ error: 'ERROR: Filename is needed!' })
                 return
             }
 
-            const full_file_path = path.join(DATA_STORE_DIRECTORY, packet.filename);
+            const full_file_path = path.join(DATA_STORE_DIRECTORY, packet.data_url);
             file_manager_backend
                 .read_and_watch(full_file_path, emit_content)
                 .on('change', emit_content)

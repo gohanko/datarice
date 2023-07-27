@@ -41,9 +41,18 @@ const SUPPORTED_CHART_TYPES = [
     //'custom'
 ]
 
+const SUPPORTED_FILE_FORMAT = [
+    '.csv',
+    '.ods',
+    '.xls',
+    '.xlsx',
+    '.json'
+]
+
 export {
     DATA_STORE_DIRECTORY,
     DEFAULT_CHART_TYPE_SIZES,
     DEFAULT_CHART_OPTIONS,
-    SUPPORTED_CHART_TYPES
+    SUPPORTED_CHART_TYPES,
+    SUPPORTED_FILE_FORMAT
 };

@@ -2,22 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import xlsx from 'node-xlsx';
 import chokidar from 'chokidar';
+import { SUPPORTED_FILE_FORMAT } from '../../common/constants';
+import { isFileFormatSupported } from '../common';
 
-const read_data_file = (filename) => {
-    const SUPPORTED_FILE_FORMAT = [
-        '.csv',
-        '.ods',
-        '.xls',
-        '.xlsx',
-        '.json'
-    ]
-
-    const extension = path.extname(filename)
-    if (!SUPPORTED_FILE_FORMAT.includes(extension)) {
+const readDataFile = (filename) => {
+    if (!isFileFormatSupported(filename)) {
         throw 'NOT_SUPPORTED';
     }
-
-    const raw_data = fs.readFileSync(filename, 'utf-8')
+    
+    const extension = path.extname(filename)
 
     let parsed_data = []
     switch(extension) {
@@ -25,9 +18,10 @@ const read_data_file = (filename) => {
     case SUPPORTED_FILE_FORMAT[1]:
     case SUPPORTED_FILE_FORMAT[2]:
     case SUPPORTED_FILE_FORMAT[3]:
-        parsed_data = xlsx.parse(raw_data);
+        parsed_data = xlsx.parse(filename);
         break
     case SUPPORTED_FILE_FORMAT[4]:
+        const raw_data = fs.readFileSync(filename, 'utf-8')
         parsed_data = JSON.parse(raw_data)
         break
     default:
@@ -35,7 +29,11 @@ const read_data_file = (filename) => {
     }
 
     return {
-        data: parsed_data
+        metadata: {
+            filename: filename.replace(/^.*[\\\/]/, '') ,
+            ext: extension,
+        },
+        content: parsed_data
     };
 }
 
@@ -65,13 +63,13 @@ const FileManagerBackend = () => {
 
     const read_and_watch = (path, callback) => {
         const watcher = chokidar.watch(path);
-        let content = read_data_file(path);
+        let content = readDataFile(path);
 
         callback(content);
 
         const on = (event_type, callback) => {
             watcher.on(event_type, () => {
-                const new_content = read_data_file(path)
+                const new_content = readDataFile(path)
             
                 if (content != new_content) {
                     content = new_content
@@ -93,6 +91,6 @@ const FileManagerBackend = () => {
 }
 
 export {
-    read_data_file,
+    readDataFile,
     FileManagerBackend,
 };
