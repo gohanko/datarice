@@ -1,8 +1,8 @@
 import {
     DEFAULT_CHART_OPTIONS,
     SUPPORTED_CHART_TYPES,
-} from "../../../common/constants";
-import { formatDate } from "../../common";
+} from "../../common/constants";
+import { formatDate } from "../random";
 import DataParsing from "../data_parsing";
 
 const ChartOptionManager = () => {

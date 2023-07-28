@@ -3,7 +3,7 @@ import path from 'path';
 import xlsx from 'node-xlsx';
 import chokidar from 'chokidar';
 import { SUPPORTED_FILE_FORMAT } from '../../common/constants';
-import { isFileFormatSupported } from '../common';
+import { isFileFormatSupported } from '../random';
 
 const readDataFile = (filename) => {
     if (!isFileFormatSupported(filename)) {

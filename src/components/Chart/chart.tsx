@@ -3,7 +3,7 @@ import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import ChartOptionManager from '../../helpers/frontend/EChartOptionManager';
+import ChartOptionManager from '../../helpers/EChartOptionManager';
 import ChartSettings from '../ChartSettings';
 import { DEFAULT_CHART_OPTIONS } from "../../common/constants"
 import styles from './chart.module.css'
