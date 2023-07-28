@@ -1,3 +1,5 @@
+import { formatDate } from "./helpers/random";
+
 const DATA_STORE_DIRECTORY = process.env.DATA_STORE_DIRECTORY;
 
 const DEFAULT_CHART_TYPE_SIZES = {
@@ -5,6 +7,12 @@ const DEFAULT_CHART_TYPE_SIZES = {
 }
 
 const DEFAULT_CHART_OPTIONS = {
+    dataset: {
+        source: []
+    },
+    title: {
+        text: '',
+    },
     tooltip : {
         trigger: 'axis'
     },
@@ -25,6 +33,16 @@ const DEFAULT_CHART_OPTIONS = {
         bottom: 24,
         left: 26,
         right: 26,
+    },
+    series: [],
+    xAxis: {
+        type: 'category',
+        axisLabel: {
+            formatter: (value) => formatDate(value, 'MMM D')
+        }
+    },
+    yAxis: {
+        min: 24
     },
 }
 
