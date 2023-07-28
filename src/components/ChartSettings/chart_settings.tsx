@@ -39,12 +39,11 @@ const ChartSettings = ({
 
     const onDelete = () => {
         removeChart(chart_id)
+        setIsSettingsOpen(false)
     }
 
     const onCancel = () => {
-        if (!data_url) {
-            removeChart(chart_id)
-        }
+        setIsSettingsOpen(false)
     }
 
     const onSubmit = () => form.submit()
