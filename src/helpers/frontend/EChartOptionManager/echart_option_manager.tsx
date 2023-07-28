@@ -2,8 +2,8 @@ import {
     DEFAULT_CHART_OPTIONS,
     SUPPORTED_CHART_TYPES,
 } from "../../../common/constants";
+import { formatDate } from "../../common";
 import DataParsing from "../data_parsing";
-import dayjs from 'dayjs';
 
 const ChartOptionManager = () => {
     let title = ''
@@ -21,11 +21,10 @@ const ChartOptionManager = () => {
 
     const setDataset = (new_data) => {
         dataset = DataParsing.parseData(new_data)
-        console.log(dataset)
         if (dataset.length == 0) {
             series = []
         } else {
-            series = dataset[0].map(() => ({
+            series = dataset[0].slice(1).map(() => ({
                 type: chart_type
             }))
         }
@@ -42,6 +41,8 @@ const ChartOptionManager = () => {
     }
 
     const getOption = () => {
+
+        console.log(series)
         const option = {
             ...DEFAULT_CHART_OPTIONS,
             title: {
@@ -53,15 +54,7 @@ const ChartOptionManager = () => {
             xAxis: {
                 type: 'category',
                 axisLabel: {
-                    formatter: ((value) => {
-                        const date = dayjs(value, 'MMM D')
-
-                        if (date.isValid()) {
-                            return date
-                        }
-
-                        return value
-                    })
+                    formatter: (value) => formatDate(value, 'MMM D')
                 }
             },
             yAxis: {
