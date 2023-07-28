@@ -10,6 +10,7 @@ import { SUPPORTED_CHART_TYPES } from '../../constants';
 import useChartList from '../../stores/chart_list';
 import useFileList from '../../stores/file_list';
 import { createItemAndLabel } from '../../helpers/random';
+import * as selectors from '../../stores/selectors';
 
 type ChartSettingsProps = {
     chart_id: number,
@@ -28,9 +29,9 @@ const ChartSettings = ({
     chartType,
     title,
 }: ChartSettingsProps) => {
-    const setDataURL = useChartList((state) => state.setDataURL)
-    const setChartType = useChartList((state) => state.setChartType)
-    const removeChart = useChartList((state) => state.removeChart)
+    const setDataURL = useChartList(selectors.setDataURL)
+    const setChartType = useChartList(selectors.setChartType)
+    const removeChart = useChartList(selectors.removeChart)
     const file_list = useFileList((state) => state.file_list)
     
     const [form] = Form.useForm();
