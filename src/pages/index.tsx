@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Layout, theme, Menu, Row, Col } from 'antd';
-import ChartDashboard from '../components/ChartDashboard';
 import {
     LineChartOutlined,
     PieChartOutlined,
@@ -9,6 +8,7 @@ import {
     InfoCircleOutlined,
     CreditCardOutlined,
 } from '@ant-design/icons';
+import ChartDashboard from '../components/ChartDashboard';
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -42,7 +42,7 @@ const Home = () => {
             key: 5,
             label: 'About',
             icon: <InfoCircleOutlined />,
-        },  
+        },
     ]
 
     const onClickMenu = (event) => {
@@ -79,7 +79,7 @@ const Home = () => {
                                         margin: collapsed ? 'auto': '0px 12px 0px 0px',
                                     }}
                                 />
-                                { !collapsed && 
+                                { !collapsed &&
                                 <React.Fragment>
                                     <span style={{ fontWeight: 'lighter', color: '#cdd9e5' }}>data</span>
                                     <span>rice</span>

@@ -17,20 +17,22 @@ const readDataFile = (filename) => {
     case SUPPORTED_FILE_FORMAT[0]:
     case SUPPORTED_FILE_FORMAT[1]:
     case SUPPORTED_FILE_FORMAT[2]:
-    case SUPPORTED_FILE_FORMAT[3]:
+    case SUPPORTED_FILE_FORMAT[3]: {
         parsed_data = xlsx.parse(filename);
         break
-    case SUPPORTED_FILE_FORMAT[4]:
+    }
+    case SUPPORTED_FILE_FORMAT[4]: {
         const raw_data = fs.readFileSync(filename, 'utf-8')
         parsed_data = JSON.parse(raw_data)
         break
+    }
     default:
         break
     }
 
     return {
         metadata: {
-            filename: filename.replace(/^.*[\\\/]/, '') ,
+            filename: filename.replace(/^.*[\\/]/, '') ,
             ext: extension,
         },
         content: parsed_data
@@ -50,7 +52,7 @@ const FileManagerBackend = () => {
         callback(files)
 
         const on = (event_type, callback) => {
-            watcher.on(event_type, () => { 
+            watcher.on(event_type, () => {
                 const new_files = list(path)
                 callback(new_files)
             })

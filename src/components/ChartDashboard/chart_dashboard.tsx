@@ -30,7 +30,7 @@ const ChartDashboard = () => {
     
     const handleOnClickFloat = () => {
         addChart({
-            data_url: '', 
+            data_url: '',
             column_size: 12
         })
     }

@@ -18,7 +18,7 @@ const useFileList = create<FileListState>()(
                     if (!state.file_list.includes(file)) {
                         return {
                             file_list: [...state.file_list, file]
-                        }   
+                        }
                     }
                 }),
                 setFileList: (file_list: Array<string>) => set(() => {

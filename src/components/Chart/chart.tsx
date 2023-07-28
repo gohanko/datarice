@@ -5,8 +5,8 @@ import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import ChartOptionManager from '../../helpers/frontend/EChartOptionManager';
 import ChartSettings from '../ChartSettings';
-import styles from './chart.module.css'
 import { DEFAULT_CHART_OPTIONS } from "../../common/constants"
+import styles from './chart.module.css'
 
 type ChartProps = {
     chart_id: number
@@ -30,7 +30,7 @@ const Chart = ({
         },
         content: ''
     })
-    const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);    
+    const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);
     const chart_option_manager = ChartOptionManager()
     const socket = io();
 
@@ -87,7 +87,7 @@ const Chart = ({
                 chartType={chart_type}
                 title={data_url ? data_url : 'Create New Chart'}
             />
-            <ReactECharts 
+            <ReactECharts
                 option={chartOption}
                 className={styles.echarts}
                 notMerge={true}

@@ -41,8 +41,6 @@ const ChartOptionManager = () => {
     }
 
     const getOption = () => {
-
-        console.log(series)
         const option = {
             ...DEFAULT_CHART_OPTIONS,
             title: {

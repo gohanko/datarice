@@ -1,6 +1,7 @@
 {
   "extends": [
     "next/core-web-vitals",
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
@@ -10,10 +11,35 @@
   ],
   "root": true,
   "rules": {
+    "strict": 0,
+    "camelcase": 0,
+    "no-console": "warn",
     "indent": [
       "error",
       4
     ],
-    "no-unused-vars": 2
+    "one-var": [
+      "error",
+      {
+          "initialized": "never",
+          "uninitialized": "always"
+      }
+    ],
+    "import/no-useless-path-segments": "error",
+    "import/prefer-default-export": 0,
+    "import/order": [
+      "error",
+      {
+          "groups": ["builtin", "external", "parent", "sibling", "index"],
+          "newlines-between": "never"
+      }
+    ],
+    "eol-last": ["error", "always"],
+    "no-trailing-spaces": [
+      "error",
+      {
+          "skipBlankLines": true
+      }
+    ]
   }
 }
