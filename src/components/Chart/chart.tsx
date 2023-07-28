@@ -5,23 +5,17 @@ import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import ChartOptionManager from '../../helpers/EChartOptionManager';
 import ChartSettings from '../ChartSettings';
-import { DEFAULT_CHART_OPTIONS } from "../../common/constants"
+import { ChartType } from '../../types/chart';
+import { DEFAULT_CHART_OPTIONS } from "../../constants"
 import styles from './chart.module.css'
 
-type ChartProps = {
-    chart_id: number
-    data_url: string
-    chart_type: string
-    is_settings_open: boolean
-}
-
 const Chart = ({
-    chart_id,
+    id,
     data_url,
-    chart_type,
-    is_settings_open,
-}: ChartProps) => {
+    chart_setting,
+}: ChartType) => {
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
+    const [isSettingsOpen, setIsSettingsOpen] = useState(!data_url)
     const [rawData, setRawData] = useState({
         metadata: {
             filename: '',
@@ -30,10 +24,10 @@ const Chart = ({
         },
         content: ''
     })
-    const [isSettingsOpen, setIsSettingsOpen] = useState(is_settings_open);
-    const chart_option_manager = ChartOptionManager()
-    const socket = io();
 
+    const chart_option_manager = ChartOptionManager()
+    
+    const socket = io();
     socket.on('load-data-from-data-file', (data) => {
         if (data.metadata.filename != data_url) {
             return
@@ -42,13 +36,16 @@ const Chart = ({
         setRawData(data)
     })
 
-    useEffect(() => {
-        chart_option_manager.setOption(rawData.metadata.filename, chart_type, rawData)
+    const loadDataIntoOptions = (data) => {
+        chart_option_manager.setOption(data.metadata.filename, chart_setting.chart_type, data)
+
         setChartOption(chartOption => ({
             ...chartOption,
             ...chart_option_manager.getOption(),
         }))
-    }, [rawData])
+    }
+
+    const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
     useEffect(() => {
         if (data_url) {
@@ -60,15 +57,12 @@ const Chart = ({
     }, [data_url])
 
     useEffect(() => {
-        chart_option_manager.setOption(rawData.metadata.filename, chart_type, rawData)
+        loadDataIntoOptions(rawData)
+    }, [rawData])
 
-        setChartOption(chartOption => ({
-            ...chartOption,
-            ...chart_option_manager.getOption(),
-        }))
-    }, [chart_type])
-
-    const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
+    useEffect(() => {
+        loadDataIntoOptions(rawData)
+    }, [chart_setting.chart_type])
 
     return (
         <Card
@@ -80,11 +74,11 @@ const Chart = ({
             ]}
         >
             <ChartSettings
-                chart_id={chart_id}
+                chart_id={id}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
                 data_url={data_url}
-                chartType={chart_type}
+                chartType={chart_setting.chart_type}
                 title={data_url ? data_url : 'Create New Chart'}
             />
             <ReactECharts

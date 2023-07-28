@@ -29,22 +29,18 @@ const ChartDashboard = () => {
     }, [])
     
     const handleOnClickFloat = () => {
-        addChart({
-            data_url: '',
-            column_size: 12
-        })
+        addChart({ data_url: '' })
     }
 
     return (
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Row gutter={[16, 16]}>
                 { chart_list.map((chart, index) => {
-                    return <Col span={chart.column_size} key={index}>
+                    return <Col span={12} key={index}>
                         <Chart
-                            chart_id={chart.id}
-                            chart_type={chart.chart_setting.chart_type}
-                            is_settings_open={false}
+                            id={chart.id}
                             data_url={chart.data_url}
+                            chart_setting={chart.chart_setting}
                         />
                     </Col>
                 })}

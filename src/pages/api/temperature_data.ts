@@ -1,7 +1,7 @@
 import path from 'path';
 import { Server } from 'socket.io';
 import { FileManagerBackend } from '../../helpers/backend/disk_operations';
-import { DATA_STORE_DIRECTORY } from '../../common/constants';
+import { DATA_STORE_DIRECTORY } from '../../constants';
 
 const TemperatureDataSocketHandler = (req, res) => {
     if (res.socket.server.io) {

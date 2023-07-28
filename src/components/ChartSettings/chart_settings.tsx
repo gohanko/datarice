@@ -6,9 +6,10 @@ import {
     Form,
     Divider
 } from 'antd';
-import { SUPPORTED_CHART_TYPES } from '../../common/constants';
+import { SUPPORTED_CHART_TYPES } from '../../constants';
 import useChartList from '../../stores/chart_list';
 import useFileList from '../../stores/file_list';
+import { createItemAndLabel } from '../../helpers/random';
 
 type ChartSettingsProps = {
     chart_id: number,
@@ -27,22 +28,22 @@ const ChartSettings = ({
     chartType,
     title,
 }: ChartSettingsProps) => {
-    const [form] = Form.useForm();
     const setDataURL = useChartList((state) => state.setDataURL)
-    const removeChart = useChartList((state) => state.removeChart)
     const setChartType = useChartList((state) => state.setChartType)
+    const removeChart = useChartList((state) => state.removeChart)
     const file_list = useFileList((state) => state.file_list)
+    
+    const [form] = Form.useForm();
+    const select_options = createItemAndLabel(file_list)
+    const chart_type_options = createItemAndLabel(SUPPORTED_CHART_TYPES, true)
 
     const onDelete = () => {
         removeChart(chart_id)
-        setIsSettingsOpen(false)
     }
 
     const onCancel = () => {
         if (!data_url) {
             removeChart(chart_id)
-        } else {
-            setIsSettingsOpen(false)
         }
     }
 
@@ -61,16 +62,6 @@ const ChartSettings = ({
 
         setIsSettingsOpen(false)
     }
-
-    const generateListAndLabel = (values, capitalise_label=false) => {
-        return values.map(value => ({
-            value: value,
-            label: capitalise_label ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : value
-        }))
-    }
-
-    const select_options = generateListAndLabel(file_list)
-    const chart_type_options = generateListAndLabel(SUPPORTED_CHART_TYPES, true)
 
     return (
         <Modal

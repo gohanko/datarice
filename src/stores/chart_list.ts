@@ -1,41 +1,31 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware'
-
-interface ChartSetting {
-    chart_type: string
-}
-
-interface ChartState {
-    id?: number
-    data_url: string
-    column_size: number
-    chart_setting?: ChartSetting
-}
+import { ChartType } from '../types/chart';
 
 interface ChartListState {
-    chart_list: Array<ChartState>
+    chart_list: Array<ChartType>
     // eslint-disable-next-line no-unused-vars
-    addChart: (chart: ChartState) => void
+    addChart: (chart: ChartType) => void
     // eslint-disable-next-line no-unused-vars
     setDataURL: (id: number, data_url: string) => void
     // eslint-disable-next-line no-unused-vars
-    getChartType: (id: number, chart_list: Array<ChartState>) => void
+    getChartType: (id: number, chart_list: Array<ChartType>) => void
     // eslint-disable-next-line no-unused-vars
     setChartType: (id: number, chart_type: string) => void
     // eslint-disable-next-line no-unused-vars
     removeChart: (id: number) => void
 }
 
-const getChartIndex = (id: number, chart_list: Array<ChartState>) => {
+const getChartIndex = (id: number, chart_list: Array<ChartType>) => {
     return chart_list.findIndex((chart) => chart.id == id)
 }
 
-const getChart = (id: number, chart_list: Array<ChartState>) => {
+const getChart = (id: number, chart_list: Array<ChartType>) => {
     const index = getChartIndex(id, chart_list)
     return chart_list[index]
 }
 
-const getChartType = (id: number, chart_list: Array<ChartState>) => {
+const getChartType = (id: number, chart_list: Array<ChartType>) => {
     const chart = getChart(id, chart_list)
     return chart.chart_setting.chart_type
 }
@@ -45,11 +35,10 @@ const useChartList = create<ChartListState>()(
         persist(
             (set) => ({
                 chart_list: [],
-                addChart: (chart: ChartState) => set((state: ChartListState) => {
-                    const new_chart: ChartState = {
+                addChart: (chart: ChartType) => set((state: ChartListState) => {
+                    const new_chart: ChartType = {
                         id: state.chart_list.length,
                         data_url: chart.data_url,
-                        column_size: chart.column_size,
                         chart_setting: {
                             chart_type: 'line'
                         }

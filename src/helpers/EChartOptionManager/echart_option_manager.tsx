@@ -1,7 +1,7 @@
 import {
     DEFAULT_CHART_OPTIONS,
     SUPPORTED_CHART_TYPES,
-} from "../../common/constants";
+} from "../../constants";
 import { formatDate } from "../random";
 import DataParsing from "../data_parsing";
 
