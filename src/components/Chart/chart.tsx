@@ -7,7 +7,6 @@ import ChartSettings from '../ChartSettings';
 import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
 import DataParsing from '../../helpers/data_parsing';
-import { formatDate } from '../../helpers/random';
 import styles from './chart.module.css'
 
 const Chart = ({
