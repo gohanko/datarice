@@ -1,0 +1,1 @@
+nodejs ./datarice/server.js

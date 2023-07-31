@@ -1,0 +1,77 @@
+#!/bin/sh
+# postinst script for nodepi
+#
+# Automatically downloads and installs node.js for the detected platform
+#
+
+set -e
+
+DEB_ARCH=$(dpkg-architecture -q DEB_HOST_ARCH)
+if [ "${DEB_ARCH}" = "armhf" ]; then
+    ARCH=armv7l
+else
+    ARCH=x64
+fi
+
+NODE_VERSION=18.16.1
+NODE_PKG=node-v${NODE_VERSION}-linux-${ARCH}.tar.xz
+NODE_URL=https://nodejs.org/dist/v${NODE_VERSION}/${NODE_PKG}
+SHA_URL=https://nodejs.org/dist/v${NODE_VERSION}/SHASUMS256.txt
+TMP_DIR=/opt/nodepi/tmp
+NODE_DIR=/opt/nodepi/node
+
+download_node()
+{
+    echo "Downloading node v${NODE_VERSION}..."
+    wget -q -P $TMP_DIR ${NODE_URL}
+}
+
+do_configure()
+{
+    mkdir -p ${TMP_DIR}
+    echo "Getting SHA sums..."
+    rm -f ${TMP_DIR}/SHASUMS256.txt
+    wget -q -P ${TMP_DIR} ${SHA_URL}
+    CHECK_SHA=$(grep "linux-${ARCH}.*xz" ${TMP_DIR}/SHASUMS256.txt | awk '{print $1}')
+    # Check to see if the package is already downloaded
+    if [ -f ${TMP_DIR}/${NODE_PKG} ]; then
+        NODE_SHA=$(sha256sum ${TMP_DIR}/${NODE_PKG} | awk '{print $1}')
+        if [ "${NODE_SHA}" = "${CHECK_SHA}" ]; then
+            echo "Node already downloaded..."
+        else
+            download_node
+        fi
+    else
+        download_node
+    fi
+
+    echo "Checking package validity..."
+    NODE_SHA=$(sha256sum ${TMP_DIR}/${NODE_PKG} | awk '{print $1}')
+    if [ "${NODE_SHA}" != "${CHECK_SHA}" ]; then
+        echo "Bad checksum: expected ${CHECK_SHA} got ${NODE_SHA}..."
+        exit 1
+    fi
+
+    echo "Unpacking node v${NODE_VERSION}..."
+    rm -rf ${NODE_DIR}
+    mkdir -p ${NODE_DIR}
+    tar -C ${NODE_DIR} --strip-components=1 -Jxf ${TMP_DIR}/${NODE_PKG}
+}
+
+case "$1" in
+    configure)
+        do_configure
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

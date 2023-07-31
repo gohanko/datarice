@@ -1,0 +1,30 @@
+#!/bin/sh
+# postrm script for nodepi
+
+set -e
+
+TMP_DIR=/opt/nodepi/tmp
+NODE_DIR=/opt/nodepi/node
+
+# Cleanup new directories created by the postinst script
+cleanup()
+{
+    rm -rf /opt/datarice/
+    rm -rf ${TMP_DIR} ${NODE_DIR}
+}
+
+case "$1" in
+    purge|remove|failed-upgrade|abort-install|abort-upgrade|disappear)
+        cleanup
+    ;;
+    upgrade)
+    ;;
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

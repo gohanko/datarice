@@ -1,0 +1,5 @@
+Package: datarice
+Version: 0.1
+Maintainer: Yii Kuo Chong (俞國忠) <byu1628@proton.me>
+Architecture: all
+Description: datarice is a simple, web-based IOT debugging, and visualisation software. 

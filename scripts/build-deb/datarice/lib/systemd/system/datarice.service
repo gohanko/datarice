@@ -1,0 +1,13 @@
+[Unit]
+Description=datarice - datarice is a simple, web-based IOT debugging, and visualisation software. 
+After=network.target
+
+[Service]
+ExecStart=/opt/datarice/start.sh
+StandardOutput=journal
+User=pi
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
