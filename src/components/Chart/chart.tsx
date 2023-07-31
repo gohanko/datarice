@@ -43,17 +43,27 @@ const Chart = ({
     
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
-    const createSeries = (column_header) => column_header
-        .filter((header) => header != currentX)
-        .map((header) => {
+    const createSeries = (column_header) => {
+        if (chart_setting.chart_type == 'pie') {
             return {
                 type: chart_setting.chart_type,
-                encode: {
-                    x: currentX,
-                    y: header
-                }
             }
-        })
+        }
+
+        return column_header
+            .filter((header) => header != currentX)
+            .map((header) => {
+
+                return {
+                    type: chart_setting.chart_type,
+                    name: header,
+                    encode: {
+                        x: currentX,
+                        y: header
+                    },
+                }
+            })
+    }
 
     useEffect(() => {
         if (dataset.length == 0) {
