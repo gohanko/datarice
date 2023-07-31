@@ -42,6 +42,9 @@ const Chart = ({
         const series = createSeries(dataset[0])
         setChartOption(chartOption => ({
             ...chartOption,
+            title: {
+                text: data_url
+            },
             dataset: {
                 source: dataset
             },
