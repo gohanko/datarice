@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from "zustand/middleware/immer";
+import { produce } from 'immer';
 import { ChartType } from '../../types/chart';
 
 export interface ChartListState {
@@ -37,46 +38,35 @@ const useChartList = create<ChartListState>()(
             persist(
                 (set) => ({
                     chart_list: [],
-                    addChart: (chart: ChartType) => set((state: ChartListState) => {
-                        const new_chart: ChartType = {
-                            id: state.chart_list.length,
-                            data_url: chart.data_url,
-                            chart_setting: {
-                                chart_type: 'line'
-                            }
-                        }
-    
-                        return {
-                            chart_list: [...state.chart_list, new_chart]
-                        }
-                    }),
-                    setDataURL: (id: number, data_url: string) => set((state: ChartListState) => {
-                        const index = getChartIndex(id, state.chart_list)
-    
-                        const new_chart_list = state.chart_list
-                        new_chart_list[index].data_url = data_url
-    
-                        return {
-                            chart_list: new_chart_list
-                        }
-                    }),
+                    addChart: (chart: ChartType) => set(
+                        produce((draft) => {
+                            draft.chart_list.push({
+                                id: draft.chart_list.length,
+                                data_url: chart.data_url,
+                                chart_setting: {
+                                    chart_type: 'line'
+                                }
+                            })
+                        })
+                    ),
+                    setDataURL: (id: number, data_url: string) => set(
+                        produce((draft) => {
+                            const index = getChartIndex(id, draft.chart_list)
+                            draft.chart_list[index].data_url = data_url
+                        })
+                    ),
                     getChartType: getChartType,
-                    setChartType: (id: number, chart_type: string) => set((state: ChartListState) => {
-                        const index = getChartIndex(id, state.chart_list)
-    
-                        const new_chart_list = state.chart_list
-                        new_chart_list[index].chart_setting.chart_type = chart_type
-                        return {
-                            chart_list: new_chart_list
-                        }
-                    }),
-                    removeChart: (id: number) => set((state: ChartListState) => {
-                        const new_chart_list = state.chart_list.filter((chart) => chart.id != id)
-    
-                        return {
-                            chart_list: new_chart_list
-                        }
-                    })
+                    setChartType: (id: number, chart_type: string) => set(
+                        produce((draft) => {
+                            const index = getChartIndex(id, draft.chart_list)
+                            draft.chart_list[index].chart_setting.chart_type = chart_type
+                        })
+                    ),
+                    removeChart: (id: number) => set(
+                        produce((draft) => {
+                            draft.chart_list = draft.chart_list.filter((chart) => chart.id != id)
+                        })
+                    )
                 }),
                 {
                     name: 'chart-list-storage'
