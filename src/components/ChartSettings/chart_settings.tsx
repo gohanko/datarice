@@ -10,6 +10,7 @@ import { SUPPORTED_CHART_TYPES } from '../../constants';
 import useChartList from '../../stores/chart_list/chart_list';
 import useFileList from '../../stores/file_list';
 import { createItemAndLabel } from '../../helpers/random';
+import ChartConfigurator from '../ChartConfigurator';
 import * as selectors from '../../stores/chart_list/selectors';
 
 type ChartSettingsProps = {
@@ -123,6 +124,9 @@ const ChartSettings = ({
                             />
                         </Form.Item>
                     </React.Fragment>
+                }
+                { chartType &&
+                    <ChartConfigurator chartType={chartType} />
                 }
             </Form>
         </Modal>
