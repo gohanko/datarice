@@ -16,10 +16,16 @@ const formatDate = (value: string, format_template: string) => {
     return value
 }
 
-const createItemAndLabel = (values, capitalise_label=false) => values.map(value => ({
-    value: value,
-    label: capitalise_label ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : value
-}))
+const createItemAndLabel = (values, capitalise_label=false) => {
+    if (values.length == 0) {
+        return []
+    }
+    
+    return values.map(value => ({
+        value: value,
+        label: capitalise_label ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : value
+    }))
+}
 
 
 export {

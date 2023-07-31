@@ -28,14 +28,11 @@ const Chart = ({
 
         const new_dataset = DataParsing.parseData(data)
         setDataset(new_dataset)
-        if (!currentX) {
-            setCurrentX(new_dataset[0][0])
-        }
     })
 
     const getDatasetColumn = () => {
         if (dataset.length == 0) {
-            return
+            return []
         }
 
         return dataset[0]
@@ -68,6 +65,10 @@ const Chart = ({
     useEffect(() => {
         if (dataset.length == 0) {
             return
+        }
+
+        if (!currentX) {
+            setCurrentX(dataset[0][0])
         }
 
         const series = createSeries(dataset[0])
@@ -122,6 +123,7 @@ const Chart = ({
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
                 dataset_column={getDatasetColumn()}
+                currentX={currentX}
                 setCurrentX={setCurrentX}
                 data_url={data_url}
                 chartType={chart_setting.chart_type}

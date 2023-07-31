@@ -18,6 +18,7 @@ type ChartSettingsProps = {
     isSettingsOpen: boolean,
     setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     dataset_column: Array<string>
+    currentX: string,
     setCurrentX: (column: string) => void,
     data_url: string,
     chartType: string,
@@ -29,6 +30,7 @@ const ChartSettings = ({
     isSettingsOpen,
     setIsSettingsOpen,
     dataset_column,
+    currentX,
     setCurrentX,
     data_url,
     chartType,
@@ -103,7 +105,7 @@ const ChartSettings = ({
                 initialValues={{
                     ["filename"]: data_url,
                     ["chart_type"]: chartType,
-                    ["line_chart_x"]: dataset_column ? dataset_column[0] : ''
+                    ["line_chart_x"]: currentX,
                 }}
             >
                 <Form.Item
@@ -135,7 +137,7 @@ const ChartSettings = ({
                         </Form.Item>
                     </React.Fragment>
                 }
-                { chartType &&
+                { (data_url && chartType) &&
                     <ChartConfigurator
                         chartType={chartType}
                         dataset_column={dataset_column}
