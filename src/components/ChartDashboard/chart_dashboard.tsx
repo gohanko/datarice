@@ -3,7 +3,7 @@ import { Space, Col, Row, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { io } from "socket.io-client";
 import Chart from '../Chart';
-import useChartList from '../../stores/chart_list';
+import useChartList from '../../stores/chart_list/chart_list';
 import useFileList from '../../stores/file_list';
 
 const ChartDashboard = () => {
