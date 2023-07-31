@@ -1,9 +1,11 @@
 import { Divider, Form, Select } from 'antd'
 import React from 'react'
+import { createItemAndLabel } from '../../../helpers/random'
 
-const LineChartConfigurator = () => {
-
-
+const LineChartConfigurator = ({
+    dataset_column
+}) => {
+    const dataset_column_options = createItemAndLabel(dataset_column)
 
     return (
         <React.Fragment>
@@ -18,7 +20,9 @@ const LineChartConfigurator = () => {
                 name={'line_chart_x'}
                 label={'X-Axis'}
             >
-                <Select />
+                <Select
+                    options={dataset_column_options}
+                />
             </Form.Item>
         </React.Fragment>
     )
