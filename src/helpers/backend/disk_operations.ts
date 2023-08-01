@@ -40,9 +40,15 @@ const readDataFile = (filename) => {
 }
 
 const FileManagerBackend = () => {
-    const list = (path) => {
-        const data = fs.readdirSync(path);
-        return data ? data : []
+    const list = (file_path) => {
+        const data = fs.readdirSync(file_path);
+        return data.map((filename) => ({
+            metadata: {
+                filename: filename,
+                ext: path.extname(filename)
+            },
+            content: ''
+        }))
     }
 
     const list_and_watch = (path, callback) => {

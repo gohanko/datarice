@@ -3,11 +3,10 @@ import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { produce } from 'immer';
 import ChartSettings from '../ChartSettings';
 import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
-import DataParsing from '../../helpers/data_parsing';
+import useFileList from '../../stores/file_list';
 import styles from './chart.module.css'
 
 const Chart = ({
@@ -20,23 +19,8 @@ const Chart = ({
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [currentX, setCurrentX] = useState('')
 
-    const socket = io();
-    socket.on('load-data-from-data-file', (data) => {
-        if (data.metadata.filename != data_url) {
-            return
-        }
-
-        const new_dataset = DataParsing.parseData(data)
-        setDataset(new_dataset)
-    })
-
-    const getDatasetColumn = () => {
-        if (dataset.length == 0) {
-            return []
-        }
-
-        return dataset[0]
-    }
+    const file_list = useFileList((state) => state.file_list)
+    const getFileData = useFileList((state) => state.getFileData)
     
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
@@ -63,6 +47,14 @@ const Chart = ({
     }
 
     useEffect(() => {
+        const data = getFileData(data_url, file_list)
+
+        if (data) {
+            setDataset(data.content)
+        }
+    }, [file_list])
+
+    useEffect(() => {
         if (dataset.length == 0) {
             return
         }
@@ -85,16 +77,19 @@ const Chart = ({
     }, [dataset])
 
     useEffect(() => {
-        if (data_url) {
-            const payload = {
-                data_url: data_url
-            }
-
-            socket.emit(
-                'load-data-from-data-file',
-                JSON.stringify(payload)
-            )
+        if (!data_url) {
+            return
         }
+
+        const payload = {
+            data_url: data_url
+        }
+
+        const socket = io();
+        socket.emit(
+            'load-data-from-data-file',
+            JSON.stringify(payload)
+        )
     }, [data_url])
 
     useEffect(() => {
@@ -122,7 +117,7 @@ const Chart = ({
                 chart_id={id}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
-                dataset_column={getDatasetColumn()}
+                dataset_column={[]}
                 currentX={currentX}
                 setCurrentX={setCurrentX}
                 data_url={data_url}

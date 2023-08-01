@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import Chart from '../Chart';
 import useChartList from '../../stores/chart_list/chart_list';
 import useFileList from '../../stores/file_list';
+import DataParsing from '../../helpers/data_parsing';
 
 const ChartDashboard = () => {
     const {
@@ -13,6 +14,7 @@ const ChartDashboard = () => {
     } = useChartList()
 
     const setFileList = useFileList((state) => state.setFileList)
+    const setFileContent = useFileList((state) => state.setFileContent)
     
     useEffect(() => {
         fetch('/api/temperature_data').finally(() => {
@@ -24,6 +26,12 @@ const ChartDashboard = () => {
             
             socket.on('list-existing-data-files', (file_list) => {
                 setFileList(file_list)
+            })
+
+            socket.on('load-data-from-data-file', (data) => {
+                const new_content = DataParsing.parseData(data)
+                data.content = new_content
+                setFileContent(data.metadata.filename, data)
             })
         })
     }, [])

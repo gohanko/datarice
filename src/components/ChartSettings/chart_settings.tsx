@@ -9,6 +9,7 @@ import {
 import { SUPPORTED_CHART_TYPES } from '../../constants';
 import useChartList from '../../stores/chart_list/chart_list';
 import useFileList from '../../stores/file_list';
+import { FileData } from '../../types/file'
 import { createItemAndLabel } from '../../helpers/random';
 import ChartConfigurator from '../ChartConfigurator';
 import * as selectors from '../../stores/chart_list/selectors';
@@ -42,7 +43,13 @@ const ChartSettings = ({
     const file_list = useFileList((state) => state.file_list)
     
     const [form] = Form.useForm();
-    const select_options = createItemAndLabel(file_list)
+
+    let file_name_list = []
+    if (file_list.length != 0) {
+        file_name_list = file_list.map((file) => file.metadata.filename)
+    }
+
+    const select_options = createItemAndLabel(file_name_list)
     const chart_type_options = createItemAndLabel(SUPPORTED_CHART_TYPES, true)
 
     const onDelete = () => {

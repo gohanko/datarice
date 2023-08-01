@@ -4,11 +4,11 @@ interface FileMetadata {
     mime: string
 }
 
-interface File {
+interface FileData {
     metadata: FileMetadata
-    content: string | object | Array<string>
+    content?: string | object | Array<string>
 }
 
 export type {
-    File
+    FileData
 }
