@@ -8,6 +8,6 @@ export const getFileData = (state: FileListState) => {
     return state.getFileData;
 };
 
-export const setFileContent = (state: FileListState) => {
-    return state.setFileContent;
+export const setFileData = (state: FileListState) => {
+    return state.setFileData;
 };

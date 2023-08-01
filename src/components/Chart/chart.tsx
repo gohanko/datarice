@@ -15,11 +15,10 @@ const Chart = ({
     chart_setting,
 }: ChartType) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(!data_url)
-    const [dataset, setDataset] = useState([])
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [currentX, setCurrentX] = useState('')
 
-    const file_list = useFileList((state) => state.file_list)
+    const file_data_list = useFileList((state) => state.file_data_list)
     const getFileData = useFileList((state) => state.getFileData)
     
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
@@ -47,6 +46,10 @@ const Chart = ({
     }
 
     const getDatasetColumn = () => {
+        const dataset = getFileData(
+            data_url,
+            file_data_list
+        ).content
         if (dataset.length == 0) {
             return []
         }
@@ -55,14 +58,23 @@ const Chart = ({
     }
 
     useEffect(() => {
-        const data = getFileData(data_url, file_list)
-
-        if (data) {
-            setDataset(data.content)
+        if (!data_url) {
+            return
         }
-    }, [file_list])
+
+        const payload = {
+            data_url: data_url
+        }
+
+        const socket = io();
+        socket.emit(
+            'load-data-from-data-file',
+            JSON.stringify(payload)
+        )
+    }, [data_url])
 
     useEffect(() => {
+        const dataset = getFileData(data_url, file_data_list).content
         if (dataset.length == 0) {
             return
         }
@@ -82,25 +94,10 @@ const Chart = ({
             },
             series: series
         }))
-    }, [dataset])
+    }, [file_data_list])
 
     useEffect(() => {
-        if (!data_url) {
-            return
-        }
-
-        const payload = {
-            data_url: data_url
-        }
-
-        const socket = io();
-        socket.emit(
-            'load-data-from-data-file',
-            JSON.stringify(payload)
-        )
-    }, [data_url])
-
-    useEffect(() => {
+        const dataset = getFileData(data_url, file_data_list).content
         if (dataset.length == 0) {
             return
         }

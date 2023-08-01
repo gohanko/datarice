@@ -14,7 +14,7 @@ const ChartDashboard = () => {
     const addChart = useChartList(chart_list_selectors.addChart)
 
     const setFileList = useFileList(file_list_selectors.setFileList)
-    const setFileContent = useFileList(file_list_selectors.setFileContent)
+    const setFileData = useFileList(file_list_selectors.setFileData)
     
     useEffect(() => {
         fetch('/api/temperature_data').finally(() => {
@@ -30,7 +30,8 @@ const ChartDashboard = () => {
 
             socket.on('load-data-from-data-file', (fileData) => {
                 const newFileData = DataParsing.parseFileData(fileData)
-                setFileContent(newFileData)
+                console.log('inside load-data-from-data-file: ', newFileData)
+                setFileData(newFileData)
             })
         })
     }, [])

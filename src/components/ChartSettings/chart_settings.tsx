@@ -43,13 +43,7 @@ const ChartSettings = ({
     const file_list = useFileList((state) => state.file_list)
     
     const [form] = Form.useForm();
-
-    let file_name_list = []
-    if (file_list.length != 0) {
-        file_name_list = file_list.map((file) => file.metadata.filename)
-    }
-
-    const select_options = createItemAndLabel(file_name_list)
+    const select_options = createItemAndLabel(file_list)
     const chart_type_options = createItemAndLabel(SUPPORTED_CHART_TYPES, true)
 
     const onDelete = () => {

@@ -5,11 +5,17 @@ import { produce } from 'immer'
 import { FileData } from '../../types/file'
 
 export interface FileListState {
-    file_list: Array<FileData>
+    file_list: Array<string>
+    file_data_list: Array<FileData>
     // eslint-disable-next-line no-unused-vars
     setFileList: (file_list: Array<FileData>) => void
-    getFileData
-    setFileContent: (fileData: FileData) => void
+    getFileData: (filename: string, file_data_list: Array<FileData>) => FileData
+    setFileData: (fileData: FileData) => void
+}
+
+const getFileData = (filename: string, file_data_list: Array<FileData>) => {
+    const data = file_data_list.find((file_data) => file_data.metadata.filename == filename) || { content: []}
+    return data
 }
 
 const useFileList = create<FileListState>()(
@@ -18,18 +24,22 @@ const useFileList = create<FileListState>()(
             persist(
                 (set) => ({
                     file_list: [],
+                    file_data_list: [],
                     setFileList: (file_list: Array<FileData>) => set(
                         produce((draft) => {
                             draft.file_list = file_list
                         })
                     ),
-                    getFileData: (filename: string, file_list: Array<FileData>) => {
-                        return file_list.find((file_data) => file_data.metadata.filename == filename)
-                    },
-                    setFileContent: (fileData: FileData) => set(
-                        produce(draft => {
-                            const index = draft.file_list.findIndex((file_data) => file_data.metadata.filename == fileData.metadata.filename)
-                            draft.file_list[index] = fileData
+                    getFileData: getFileData,
+                    setFileData: (fileData: FileData) => set(
+                        produce((draft) => {
+                            const index = draft.file_data_list.findIndex((file_data) => file_data.metadata.filename == fileData.metadata.filename)
+                            if (index == -1) {
+                                draft.file_data_list.push(fileData)
+                            } else {
+                                draft.file_data_list[index] = fileData
+                            }
+                            
                         })
                     )
                 }),

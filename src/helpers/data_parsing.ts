@@ -43,7 +43,6 @@ const DataParsing = (() => {
         }
 
         fileData.content = dataset
-
         return fileData
     }
 

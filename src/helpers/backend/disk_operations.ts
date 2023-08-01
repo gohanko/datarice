@@ -42,13 +42,7 @@ const readDataFile = (filename) => {
 const FileManagerBackend = () => {
     const list = (file_path) => {
         const data = fs.readdirSync(file_path);
-        return data.map((filename) => ({
-            metadata: {
-                filename: filename,
-                ext: path.extname(filename)
-            },
-            content: ''
-        }))
+        return data.map((filename) => filename)
     }
 
     const list_and_watch = (path, callback) => {
