@@ -2,14 +2,14 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { produce } from 'immer'
-import { FileData } from '../types/file'
+import { FileData } from '../../types/file'
 
-interface FileListState {
+export interface FileListState {
     file_list: Array<FileData>
     // eslint-disable-next-line no-unused-vars
     setFileList: (file_list: Array<FileData>) => void
     getFileData
-    setFileContent: (filename: string, content) => void
+    setFileContent: (fileData: FileData) => void
 }
 
 const useFileList = create<FileListState>()(
@@ -26,12 +26,10 @@ const useFileList = create<FileListState>()(
                     getFileData: (filename: string, file_list: Array<FileData>) => {
                         return file_list.find((file_data) => file_data.metadata.filename == filename)
                     },
-                    setFileContent: (filename: string, content) => set(
+                    setFileContent: (fileData: FileData) => set(
                         produce(draft => {
-                            const index = draft.file_list.findIndex((file_data) => file_data.metadata.filename == filename)
-
-                            draft.file_list[index].metadata = content.metadata
-                            draft.file_list[index].content = content.content
+                            const index = draft.file_list.findIndex((file_data) => file_data.metadata.filename == fileData.metadata.filename)
+                            draft.file_list[index] = fileData
                         })
                     )
                 }),

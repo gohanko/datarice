@@ -19,34 +19,36 @@ const DataParsing = (() => {
         return dataset
     }
     
-    const parseNodeXLSX = (content, worksheet_name='Sheet1') => {
-        const selected_worksheet_index = content.worksheets.findIndex((worksheet) => worksheet.name == worksheet_name)
-        const selected_worksheet = content.worksheets[selected_worksheet_index]
+    const parseNodeXLSX = (data, worksheet_name='Sheet1') => {
+        const selected_worksheet_index = data.worksheets.findIndex((worksheet) => worksheet.name == worksheet_name)
+        const selected_worksheet = data.worksheets[selected_worksheet_index]
         const dataset = selected_worksheet.data.map((row) => row.map((item) => item.value))
         return dataset
     }
 
-    const parseData = (data) => {
+    const parseFileData = (fileData) => {
         let dataset = [];
         
-        if (data) {
-            switch (data.metadata.ext) {
+        if (fileData) {
+            switch (fileData.metadata.ext) {
             case '.json':
-                dataset = parseJSONTo2DTable(data.content)
+                dataset = parseJSONTo2DTable(fileData.content)
                 break
             case '.xlsx':
-                dataset = parseNodeXLSX(data.content)
+                dataset = parseNodeXLSX(fileData.content)
                 break
             default:
                 break
             }
         }
 
-        return dataset
+        fileData.content = dataset
+
+        return fileData
     }
 
     return {
-        parseData
+        parseFileData
     }
 })()
 

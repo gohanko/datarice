@@ -4,17 +4,17 @@ import { PlusOutlined } from '@ant-design/icons';
 import { io } from "socket.io-client";
 import Chart from '../Chart';
 import useChartList from '../../stores/chart_list/chart_list';
-import useFileList from '../../stores/file_list';
+import useFileList from '../../stores/file_list/file_list';
 import DataParsing from '../../helpers/data_parsing';
+import * as chart_list_selectors from '../../stores/chart_list/selectors';
+import * as file_list_selectors from '../../stores/file_list/selectors';
 
 const ChartDashboard = () => {
-    const {
-        chart_list,
-        addChart,
-    } = useChartList()
+    const chart_list = useChartList(chart_list_selectors.chart_list)
+    const addChart = useChartList(chart_list_selectors.addChart)
 
-    const setFileList = useFileList((state) => state.setFileList)
-    const setFileContent = useFileList((state) => state.setFileContent)
+    const setFileList = useFileList(file_list_selectors.setFileList)
+    const setFileContent = useFileList(file_list_selectors.setFileContent)
     
     useEffect(() => {
         fetch('/api/temperature_data').finally(() => {
@@ -28,30 +28,27 @@ const ChartDashboard = () => {
                 setFileList(file_list)
             })
 
-            socket.on('load-data-from-data-file', (data) => {
-                const new_content = DataParsing.parseData(data)
-                data.content = new_content
-                setFileContent(data.metadata.filename, data)
+            socket.on('load-data-from-data-file', (fileData) => {
+                const newFileData = DataParsing.parseFileData(fileData)
+                setFileContent(newFileData)
             })
         })
     }, [])
     
-    const handleOnClickFloat = () => {
-        addChart({ data_url: '' })
-    }
+    const handleOnClickFloat = () => addChart({ data_url: '' })
 
     return (
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Row gutter={[16, 16]}>
-                { chart_list.map((chart, index) => {
-                    return <Col span={12} key={index}>
+                { chart_list.map((chart, index) => (
+                    <Col span={12} key={index}>
                         <Chart
                             id={chart.id}
                             data_url={chart.data_url}
                             chart_setting={chart.chart_setting}
                         />
                     </Col>
-                })}
+                ))}
             </Row>
 
             <FloatButton

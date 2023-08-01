@@ -6,7 +6,7 @@ import { SettingOutlined } from '@ant-design/icons';
 import ChartSettings from '../ChartSettings';
 import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
-import useFileList from '../../stores/file_list';
+import useFileList from '../../stores/file_list/file_list';
 import styles from './chart.module.css'
 
 const Chart = ({
@@ -44,6 +44,14 @@ const Chart = ({
                     },
                 }
             })
+    }
+
+    const getDatasetColumn = () => {
+        if (dataset.length == 0) {
+            return []
+        }
+
+        return dataset[0]
     }
 
     useEffect(() => {
@@ -117,7 +125,7 @@ const Chart = ({
                 chart_id={id}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
-                dataset_column={[]}
+                dataset_column={getDatasetColumn()}
                 currentX={currentX}
                 setCurrentX={setCurrentX}
                 data_url={data_url}

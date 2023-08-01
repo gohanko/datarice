@@ -1,5 +1,13 @@
 import { ChartListState } from "./chart_list";
 
+export const chart_list = (state: ChartListState) => {
+    return state.chart_list
+}
+
+export const addChart = (state: ChartListState) => {
+    return state.addChart
+}
+
 export const setDataURL = (state: ChartListState) => {
     return state.setDataURL;
 };

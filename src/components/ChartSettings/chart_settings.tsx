@@ -8,7 +8,7 @@ import {
 } from 'antd';
 import { SUPPORTED_CHART_TYPES } from '../../constants';
 import useChartList from '../../stores/chart_list/chart_list';
-import useFileList from '../../stores/file_list';
+import useFileList from '../../stores/file_list/file_list';
 import { FileData } from '../../types/file'
 import { createItemAndLabel } from '../../helpers/random';
 import ChartConfigurator from '../ChartConfigurator';
