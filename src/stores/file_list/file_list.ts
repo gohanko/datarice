@@ -7,15 +7,8 @@ import { FileData } from '../../types/file'
 export interface FileListState {
     file_list: Array<string>
     file_data_list: Array<FileData>
-    // eslint-disable-next-line no-unused-vars
     setFileList: (file_list: Array<FileData>) => void
-    getFileData: (filename: string, file_data_list: Array<FileData>) => FileData
     setFileData: (fileData: FileData) => void
-}
-
-const getFileData = (filename: string, file_data_list: Array<FileData>) => {
-    const data = file_data_list.find((file_data) => file_data.metadata.filename == filename) || { content: []}
-    return data
 }
 
 const useFileList = create<FileListState>()(
@@ -30,7 +23,6 @@ const useFileList = create<FileListState>()(
                             draft.file_list = file_list
                         })
                     ),
-                    getFileData: getFileData,
                     setFileData: (fileData: FileData) => set(
                         produce((draft) => {
                             const index = draft.file_data_list.findIndex((file_data) => file_data.metadata.filename == fileData.metadata.filename)

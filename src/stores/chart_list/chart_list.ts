@@ -6,30 +6,10 @@ import { ChartType } from '../../types/chart';
 
 export interface ChartListState {
     chart_list: Array<ChartType>
-    // eslint-disable-next-line no-unused-vars
     addChart: (chart: ChartType) => void
-    // eslint-disable-next-line no-unused-vars
     setDataURL: (id: number, data_url: string) => void
-    // eslint-disable-next-line no-unused-vars
-    getChartType: (id: number, chart_list: Array<ChartType>) => void
-    // eslint-disable-next-line no-unused-vars
     setChartType: (id: number, chart_type: string) => void
-    // eslint-disable-next-line no-unused-vars
     removeChart: (id: number) => void
-}
-
-const getChartIndex = (id: number, chart_list: Array<ChartType>) => {
-    return chart_list.findIndex((chart) => chart.id == id)
-}
-
-const getChart = (id: number, chart_list: Array<ChartType>) => {
-    const index = getChartIndex(id, chart_list)
-    return chart_list[index]
-}
-
-const getChartType = (id: number, chart_list: Array<ChartType>) => {
-    const chart = getChart(id, chart_list)
-    return chart.chart_setting.chart_type
 }
 
 const useChartList = create<ChartListState>()(
@@ -51,15 +31,18 @@ const useChartList = create<ChartListState>()(
                     ),
                     setDataURL: (id: number, data_url: string) => set(
                         produce((draft) => {
-                            const index = getChartIndex(id, draft.chart_list)
-                            draft.chart_list[index].data_url = data_url
+                            const chart = draft.chart_list.find((chart) => chart.id == id)
+                            if (chart) {
+                                chart.data_url = data_url
+                            }
                         })
                     ),
-                    getChartType: getChartType,
                     setChartType: (id: number, chart_type: string) => set(
                         produce((draft) => {
-                            const index = getChartIndex(id, draft.chart_list)
-                            draft.chart_list[index].chart_setting.chart_type = chart_type
+                            const chart = draft.chart_list.find((chart) => chart.id == id)
+                            if (chart) {
+                                chart.chart_setting.chart_type = chart_type
+                            }
                         })
                     ),
                     removeChart: (id: number) => set(

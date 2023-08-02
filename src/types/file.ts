@@ -6,7 +6,7 @@ interface FileMetadata {
 
 interface FileData {
     metadata: FileMetadata
-    content?: string | object | Array<string>
+    content?: any
 }
 
 export type {

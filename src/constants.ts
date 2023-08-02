@@ -38,13 +38,15 @@ const DEFAULT_CHART_OPTIONS = {
     xAxis: {
         type: 'category',
         axisLabel: {
-            formatter: (value) => formatDate(value, 'MMM D')
+            formatter: (value) => formatDate(value, 'MMM DD')
         }
     },
     yAxis: {
         min: 24
     },
 }
+
+const SYSTEM_DATE_FORMAT = 'YYYY-MM-DD'
 
 const SUPPORTED_CHART_TYPES = [
     'line',
@@ -72,5 +74,6 @@ export {
     DEFAULT_CHART_TYPE_SIZES,
     DEFAULT_CHART_OPTIONS,
     SUPPORTED_CHART_TYPES,
-    SUPPORTED_FILE_FORMAT
+    SUPPORTED_FILE_FORMAT,
+    SYSTEM_DATE_FORMAT,
 };

@@ -7,6 +7,7 @@ import ChartSettings from '../ChartSettings';
 import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
 import useFileList from '../../stores/file_list/file_list';
+import { getFileData } from '../../stores/file_list/helpers';
 import styles from './chart.module.css'
 
 const Chart = ({
@@ -19,8 +20,7 @@ const Chart = ({
     const [currentX, setCurrentX] = useState('')
 
     const file_data_list = useFileList((state) => state.file_data_list)
-    const getFileData = useFileList((state) => state.getFileData)
-    
+
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
     const createSeries = (column_header) => {
@@ -32,17 +32,14 @@ const Chart = ({
 
         return column_header
             .filter((header) => header != currentX)
-            .map((header) => {
-
-                return {
-                    type: chart_setting.chart_type,
-                    name: header,
-                    encode: {
-                        x: currentX,
-                        y: header
-                    },
-                }
-            })
+            .map((header) => ({
+                type: chart_setting.chart_type,
+                name: header,
+                encode: {
+                    x: currentX,
+                    y: header
+                },
+            }))
     }
 
     const getDatasetColumn = () => {

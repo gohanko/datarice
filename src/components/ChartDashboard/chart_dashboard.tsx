@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Space, Col, Row, FloatButton } from 'antd';
+import { Col, Row, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { io } from "socket.io-client";
 import Chart from '../Chart';
@@ -30,7 +30,6 @@ const ChartDashboard = () => {
 
             socket.on('load-data-from-data-file', (fileData) => {
                 const newFileData = DataParsing.parseFileData(fileData)
-                console.log('inside load-data-from-data-file: ', newFileData)
                 setFileData(newFileData)
             })
         })
@@ -39,7 +38,7 @@ const ChartDashboard = () => {
     const handleOnClickFloat = () => addChart({ data_url: '' })
 
     return (
-        <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+        <React.Fragment>
             <Row gutter={[16, 16]}>
                 { chart_list.map((chart, index) => (
                     <Col span={12} key={index}>
@@ -56,7 +55,7 @@ const ChartDashboard = () => {
                 icon={<PlusOutlined />}
                 onClick={handleOnClickFloat}
             />
-        </Space>
+        </React.Fragment>
     );
 }
 

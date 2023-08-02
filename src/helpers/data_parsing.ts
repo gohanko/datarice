@@ -20,30 +20,31 @@ const DataParsing = (() => {
     }
     
     const parseNodeXLSX = (data, worksheet_name='Sheet1') => {
-        const selected_worksheet_index = data.worksheets.findIndex((worksheet) => worksheet.name == worksheet_name)
-        const selected_worksheet = data.worksheets[selected_worksheet_index]
-        const dataset = selected_worksheet.data.map((row) => row.map((item) => item.value))
+        const selected_worksheet_index = data.findIndex((worksheet) => worksheet.name == worksheet_name)
+        const selected_worksheet = data[selected_worksheet_index]
+        const dataset = selected_worksheet.data.map((row) => row.map((item) => item))
         return dataset
     }
 
     const parseFileData = (fileData) => {
+        const newFileData = JSON.parse(JSON.stringify(fileData)) // Deepcopy here because parseFileData will alter the original dataset causing bugs.
         let dataset = [];
         
-        if (fileData) {
-            switch (fileData.metadata.ext) {
+        if (newFileData) {
+            switch (newFileData.metadata.ext) {
             case '.json':
-                dataset = parseJSONTo2DTable(fileData.content)
+                dataset = parseJSONTo2DTable(newFileData.content)
                 break
             case '.xlsx':
-                dataset = parseNodeXLSX(fileData.content)
+                dataset = parseNodeXLSX(newFileData.content)
                 break
             default:
                 break
             }
         }
 
-        fileData.content = dataset
-        return fileData
+        newFileData.content = dataset
+        return newFileData
     }
 
     return {

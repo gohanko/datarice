@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import xlsx from 'node-xlsx';
+import xlsx from 'xlsx';
 import chokidar from 'chokidar';
 import { SUPPORTED_FILE_FORMAT } from '../../constants';
 import { isFileFormatSupported } from '../random';
@@ -12,13 +12,23 @@ const readDataFile = (filename) => {
     
     const extension = path.extname(filename)
 
-    let parsed_data = []
+    let parsed_data = undefined
     switch(extension) {
     case SUPPORTED_FILE_FORMAT[0]:
     case SUPPORTED_FILE_FORMAT[1]:
     case SUPPORTED_FILE_FORMAT[2]:
     case SUPPORTED_FILE_FORMAT[3]: {
-        parsed_data = xlsx.parse(filename);
+        const raw_data = fs.readFileSync(filename)
+        const workbook = xlsx.read(raw_data, { raw: true })
+
+        parsed_data = Object.keys(workbook.Sheets).map((name) => {
+            const sheet = workbook.Sheets[name]
+            return {
+                name,
+                data: xlsx.utils.sheet_to_json(sheet, { header: 1 })
+            }
+        })
+
         break
     }
     case SUPPORTED_FILE_FORMAT[4]: {
