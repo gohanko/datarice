@@ -1,3 +1,5 @@
+import { SUPPORTED_FILE_FORMAT } from "../constants"
+
 const DataParsing = (() => {
     // Converts JSON object into a 2D table
     const parseJSONTo2DTable = (data) => {
@@ -32,14 +34,20 @@ const DataParsing = (() => {
         
         if (newFileData) {
             switch (newFileData.metadata.ext) {
-            case '.json':
-                dataset = parseJSONTo2DTable(newFileData.content)
-                break
-            case '.xlsx':
+            case SUPPORTED_FILE_FORMAT[0]:
+            case SUPPORTED_FILE_FORMAT[1]:
+            case SUPPORTED_FILE_FORMAT[2]:
+            case SUPPORTED_FILE_FORMAT[3]: {
                 dataset = parseNodeXLSX(newFileData.content)
                 break
-            default:
+            }
+            case SUPPORTED_FILE_FORMAT[4]: {
+                dataset = parseJSONTo2DTable(newFileData.content)
                 break
+            }
+            default: {
+                break
+            }
             }
         }
 
