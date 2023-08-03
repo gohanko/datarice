@@ -1,5 +1,6 @@
 import React from 'react'
-import LineChartConfigurator from './LineChartConfigurator'
+import { SUPPORTED_CHART_TYPES } from '../../constants'
+import CartesianPlaneConfigurator from './CartesianPlaneConfigurator'
 
 interface ChartConfiguratorProps {
     chartType: string
@@ -12,8 +13,8 @@ const ChartConfigurator = ({
 }: ChartConfiguratorProps) => {
     return (
         <React.Fragment>
-            { chartType == 'line' &&
-                <LineChartConfigurator dataset_column={dataset_column} />
+            { (chartType == SUPPORTED_CHART_TYPES[0] || chartType == SUPPORTED_CHART_TYPES[3] || chartType == SUPPORTED_CHART_TYPES[4]) &&
+                <CartesianPlaneConfigurator dataset_column={dataset_column} />
             }
         </React.Fragment>
     )

@@ -2,7 +2,7 @@ import { Divider, Form, Select } from 'antd'
 import React from 'react'
 import { createItemAndLabel } from '../../../helpers/random'
 
-const LineChartConfigurator = ({
+const CartesianPlaneConfigurator = ({
     dataset_column
 }) => {
     const dataset_column_options = createItemAndLabel(dataset_column)
@@ -28,4 +28,4 @@ const LineChartConfigurator = ({
     )
 }
 
-export default LineChartConfigurator
+export default CartesianPlaneConfigurator
