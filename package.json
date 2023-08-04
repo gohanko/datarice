@@ -10,7 +10,7 @@
     "export": "next export",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "demo:cw": "node scripts/continuous_write.mjs"
+    "continuous_write": "node scripts/continuous_write.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
