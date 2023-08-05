@@ -37,7 +37,7 @@ Pull Requests are welcomed. For major changes, please open an issue first to dis
 Please make sure to update or create tests as appropriate.
 
 ## Acknowledgment
-I would like to thank the following people, whose guidance and help provided me with a ideas and inspirations while developing this project.
+I would like to thank the following people, whose guidance and help provided me with invaluable insights and inspirations while developing this project.
 
-- [Dr. Ooi Boon Yaik](https://github.com/boonyaik) <<ooiby@utar.edu.my>>, my final year project supervisor, for the original project title/idea, and guiding me throughout my final year project. His valuable, and constructive suggestions and critiques has been extremely valuable to make the project successful.
+- [Dr. Ooi Boon Yaik](https://github.com/boonyaik) <<ooiby@utar.edu.my>>, my final year project supervisor, for the original project title/idea, and guiding me throughout my final year project. His valuable, and constructive suggestions and critiques has been extremely valuable to ensuring the project is successful.
 - [Aaron Imming](https://github.com/aaimio) <<placeholder@email.com>>, for his help answering my NodeJS/React related question when I was developing the project. His advice, and help has allowed me to complete my work faster, and produce better code.
