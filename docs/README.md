@@ -10,7 +10,7 @@ cd datarice
 npm ci
 ```
 
-The application is installed. Now all you need to do is run this command.
+The application is now installed, and all you need to do next is to run this command.
 
 ```bash
 npm run start
@@ -32,6 +32,12 @@ To override the defaults, you should add a ```.env.local``` file in the root of 
 ![Alt text](screenshots/datarice_2023-07-24.png "DataRice Screenshot")
 
 ## Contributing
+Pull Requests are welcomed. For major changes, please open an issue first to discuss what you would like to change.
 
-- File bugs, features requests in [Github Issues](https://github.com/gohanko/datarice/issues)
-- Create Pull Requests in [Github Pull](https://github.com/gohanko/datarice/pulls)
+Please make sure to update or create tests as appropriate.
+
+## Acknowledgment
+I would like to thank the following people, whose guidance and help provided me with a ideas and inspirations while developing this project.
+
+- [Dr. Ooi Boon Yaik](https://github.com/boonyaik) <<ooiby@utar.edu.my>>, my final year project supervisor, for the original project title/idea, and guiding me throughout my final year project. His valuable, and constructive suggestions and critiques has been extremely valuable to make the project successful.
+- [Aaron Imming](https://github.com/aaimio) <<placeholder@email.com>>, for his help answering my NodeJS/React related question when I was developing the project. His advice, and help has allowed me to complete my work faster, and produce better code.
