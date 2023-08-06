@@ -40,6 +40,6 @@ Please make sure to update or create tests as appropriate.
 I would like to thank the following people, whose guidance and help provided me with invaluable insights and inspirations while developing this project.
 
 - [Dr. Ooi Boon Yaik](https://github.com/boonyaik) <<ooiby@utar.edu.my>>, my final year project supervisor, for the original project title/idea, and guiding me throughout my final year project. His valuable, and constructive suggestions and critiques has been extremely valuable to ensuring the project is successful.
-- [Aaron Imming](https://github.com/aaimio) <<placeholder@email.com>>, for his help answering my NodeJS/React related question when I was developing the project. His advice, and help has allowed me to complete my work faster, and produce better code.
+- [Aaron Imming](https://github.com/aaimio) <<aaim@protonmail.com>>, for his help answering my NodeJS/React related question when I was developing the project. His advice, and help has allowed me to complete my work faster, and produce better code.
 
 I would also like to thank my university, [University Tunku Abdul Rahman (UTAR)](https://www.utar.edu.my/), without which I would not have the opportunity to participate in academic research and development work.
