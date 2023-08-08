@@ -5,10 +5,10 @@ import { produce } from 'immer';
 import { ChartType } from '../../types/chart';
 
 export interface ChartListState {
-    chart_list: Array<ChartType>
+    chartList: Array<ChartType>
     addChart: (chart: ChartType) => void
-    setDataURL: (id: number, data_url: string) => void
-    setChartType: (id: number, chart_type: string) => void
+    setDataURL: (id: number, dataUrl: string) => void
+    setChartType: (id: number, chartType: string) => void
     removeChart: (id: number) => void
 }
 
@@ -17,29 +17,29 @@ const useChartList = create<ChartListState>()(
         immer(
             persist(
                 (set) => ({
-                    chart_list: [],
+                    chartList: [],
                     addChart: (chart: ChartType) => set(
                         produce((draft) => {
-                            draft.chart_list.push({
-                                id: draft.chart_list.length,
-                                data_url: chart.data_url,
-                                chart_setting: {
-                                    chart_type: 'line'
+                            draft.chartList.push({
+                                id: draft.chartList.length,
+                                dataUrl: chart.dataUrl,
+                                chartSetting: {
+                                    chartType: 'line'
                                 }
                             })
                         })
                     ),
-                    setDataURL: (id: number, data_url: string) => set(
+                    setDataURL: (id: number, dataUrl: string) => set(
                         produce((draft) => {
-                            const chart = draft.chart_list.find((chart) => chart.id == id)
+                            const chart = draft.chartList.find((chart) => chart.id == id)
                             if (chart) {
-                                chart.data_url = data_url
+                                chart.dataUrl = dataUrl
                             }
                         })
                     ),
                     setChartType: (id: number, chart_type: string) => set(
                         produce((draft) => {
-                            const chart = draft.chart_list.find((chart) => chart.id == id)
+                            const chart = draft.chartList.find((chart) => chart.id == id)
                             if (chart) {
                                 chart.chart_setting.chart_type = chart_type
                             }
@@ -47,7 +47,7 @@ const useChartList = create<ChartListState>()(
                     ),
                     removeChart: (id: number) => set(
                         produce((draft) => {
-                            draft.chart_list = draft.chart_list.filter((chart) => chart.id != id)
+                            draft.chartList = draft.chartList.filter((chart) => chart.id != id)
                         })
                     )
                 }),

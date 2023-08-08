@@ -31,12 +31,12 @@ const TemperatureDataSocketHandler = (req, res) => {
                 socket.broadcast.emit('load-data-from-data-file', content)
             }
 
-            if (!packet?.data_url) {
+            if (!packet?.dataUrl) {
                 emit_content({ error: 'ERROR: Filename is needed!' })
                 return
             }
 
-            const full_file_path = path.join(DATA_STORE_DIRECTORY, packet.data_url);
+            const full_file_path = path.join(DATA_STORE_DIRECTORY, packet.dataUrl);
             file_manager_backend
                 .read_and_watch(full_file_path, emit_content)
                 .on('change', emit_content)

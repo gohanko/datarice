@@ -12,29 +12,28 @@ import useFileList from '../../stores/file_list/file_list';
 import { createItemAndLabel } from '../../helpers/random';
 import ChartConfigurator from '../ChartConfigurator';
 import * as selectors from '../../stores/chart_list/selectors';
+import { ChartSettingType } from '../../types/chart';
 
 type ChartSettingsProps = {
-    chart_id: number,
     isSettingsOpen: boolean,
     setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    dataset_column: Array<string>
     currentX: string,
     setCurrentX: (column: string) => void,
-    data_url: string,
-    chartType: string,
-    title: string,
+    datasetColumn: Array<string>
+    chartId: number,
+    dataUrl: string,
+    chartSetting: ChartSettingType,
 }
 
 const ChartSettings = ({
-    chart_id,
     isSettingsOpen,
     setIsSettingsOpen,
-    dataset_column,
     currentX,
     setCurrentX,
-    data_url,
-    chartType,
-    title,
+    datasetColumn,
+    chartId,
+    dataUrl,
+    chartSetting,
 }: ChartSettingsProps) => {
     const setDataURL = useChartList(selectors.setDataURL)
     const setChartType = useChartList(selectors.setChartType)
@@ -46,7 +45,7 @@ const ChartSettings = ({
     const chart_type_options = createItemAndLabel(SUPPORTED_CHART_TYPES, true)
 
     const onDelete = () => {
-        removeChart(chart_id)
+        removeChart(chartId)
         setIsSettingsOpen(false)
     }
 
@@ -59,12 +58,12 @@ const ChartSettings = ({
     const onFormFinished = (form_value) => {
         const filename = form_value?.filename
         if (filename) {
-            setDataURL(chart_id, filename)
+            setDataURL(chartId, filename)
         }
 
         const chart_type = form_value?.chart_type
         if (chart_type) {
-            setChartType(chart_id, chart_type)
+            setChartType(chartId, chart_type)
         }
 
         const line_chart_x = form_value?.line_chart_x
@@ -77,7 +76,7 @@ const ChartSettings = ({
 
     return (
         <Modal
-            title={title}
+            title={dataUrl ? dataUrl : 'Create New Chart'}
             open={isSettingsOpen}
             onCancel={onCancel}
             footer={[
@@ -103,8 +102,8 @@ const ChartSettings = ({
                 form={form}
                 onFinish={onFormFinished}
                 initialValues={{
-                    ["filename"]: data_url,
-                    ["chart_type"]: chartType,
+                    ["filename"]: dataUrl,
+                    ["chart_type"]: chartSetting.chartType,
                     ["line_chart_x"]: currentX,
                 }}
             >
@@ -118,7 +117,7 @@ const ChartSettings = ({
                         showSearch={true}
                     />
                 </Form.Item>
-                { data_url &&
+                { dataUrl &&
                     <React.Fragment>
                         <Divider
                             orientation='left'
@@ -137,10 +136,10 @@ const ChartSettings = ({
                         </Form.Item>
                     </React.Fragment>
                 }
-                { (data_url && chartType) &&
+                { (dataUrl && chartSetting.chartType) &&
                     <ChartConfigurator
-                        chartType={chartType}
-                        dataset_column={dataset_column}
+                        chartType={chartSetting.chartType}
+                        dataset_column={datasetColumn}
                     />
                 }
             </Form>

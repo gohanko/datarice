@@ -10,7 +10,7 @@ import * as chart_list_selectors from '../../stores/chart_list/selectors';
 import * as file_list_selectors from '../../stores/file_list/selectors';
 
 const ChartDashboard = () => {
-    const chart_list = useChartList(chart_list_selectors.chart_list)
+    const chartList = useChartList(chart_list_selectors.chartList)
     const addChart = useChartList(chart_list_selectors.addChart)
 
     const setFileList = useFileList(file_list_selectors.setFileList)
@@ -35,12 +35,12 @@ const ChartDashboard = () => {
         })
     }, [])
     
-    const handleOnClickFloat = () => addChart({ data_url: '' })
+    const handleOnClickFloat = () => addChart({ dataUrl: '' })
 
     return (
         <React.Fragment>
             <Row gutter={[16, 16]}>
-                { chart_list.map((chart, index) => (
+                { chartList.map((chart, index) => (
                     <Col span={12} key={index}>
                         <Chart {...chart} />
                     </Col>

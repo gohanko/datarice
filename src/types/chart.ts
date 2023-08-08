@@ -1,11 +1,11 @@
 interface ChartSettingType {
-    chart_type: string
+    chartType: string
 }
 
 interface ChartType {
     id?: number
-    chart_setting?: ChartSettingType
-    data_url: string
+    chartSetting?: ChartSettingType
+    dataUrl: string
 }
 
 export type {

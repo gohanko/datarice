@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
@@ -11,10 +11,10 @@ import { getFileData } from '../../stores/file_list/helpers';
 
 const Chart = ({
     id,
-    chart_setting,
-    data_url,
+    chartSetting,
+    dataUrl,
 }: ChartType) => {
-    const [isSettingsOpen, setIsSettingsOpen] = useState(!data_url)
+    const [isSettingsOpen, setIsSettingsOpen] = useState(!dataUrl)
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [currentX, setCurrentX] = useState('')
     const file_data_list = useFileList((state) => state.file_data_list)
@@ -22,16 +22,16 @@ const Chart = ({
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
     const createSeries = (column_header) => {
-        if (chart_setting.chart_type == 'pie') {
+        if (chartSetting.chartType == 'pie') {
             return {
-                type: chart_setting.chart_type,
+                type: chartSetting.chartType,
             }
         }
 
         return column_header
             .filter((header) => header != currentX)
             .map((header) => ({
-                type: chart_setting.chart_type,
+                type: chartSetting.chartType,
                 name: header,
                 encode: {
                     x: currentX,
@@ -42,7 +42,7 @@ const Chart = ({
 
     const getDatasetColumn = () => {
         const dataset = getFileData(
-            data_url,
+            dataUrl,
             file_data_list
         ).content
         if (dataset.length == 0) {
@@ -53,12 +53,12 @@ const Chart = ({
     }
 
     useEffect(() => {
-        if (!data_url) {
+        if (!dataUrl) {
             return
         }
 
         const payload = {
-            data_url: data_url
+            dataUrl: dataUrl
         }
 
         const socket = io();
@@ -66,10 +66,10 @@ const Chart = ({
             'load-data-from-data-file',
             JSON.stringify(payload)
         )
-    }, [data_url])
+    }, [dataUrl])
 
     useEffect(() => {
-        const dataset = getFileData(data_url, file_data_list).content
+        const dataset = getFileData(dataUrl, file_data_list).content
         if (dataset.length == 0) {
             return
         }
@@ -82,7 +82,7 @@ const Chart = ({
         setChartOption(chartOption => ({
             ...chartOption,
             title: {
-                text: data_url
+                text: dataUrl
             },
             dataset: {
                 source: dataset
@@ -92,7 +92,7 @@ const Chart = ({
     }, [file_data_list])
 
     useEffect(() => {
-        const dataset = getFileData(data_url, file_data_list).content
+        const dataset = getFileData(dataUrl, file_data_list).content
         if (dataset.length == 0) {
             return
         }
@@ -102,7 +102,7 @@ const Chart = ({
             ...chartOption,
             series: series
         }))
-    }, [chart_setting.chart_type, currentX])
+    }, [chartSetting.chartType, currentX])
 
     return (
         <Card
@@ -114,15 +114,14 @@ const Chart = ({
             ]}
         >
             <ChartSettings
-                chart_id={id}
+                chartId={id}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
-                dataset_column={getDatasetColumn()}
+                datasetColumn={getDatasetColumn()}
                 currentX={currentX}
                 setCurrentX={setCurrentX}
-                data_url={data_url}
-                chartType={chart_setting.chart_type}
-                title={data_url ? data_url : 'Create New Chart'}
+                dataUrl={dataUrl}
+                chartSetting={chartSetting}
             />
             <ReactECharts
                 notMerge={true}

@@ -1,7 +1,7 @@
 import { ChartListState } from "./chart_list";
 
-export const chart_list = (state: ChartListState) => {
-    return state.chart_list
+export const chartList = (state: ChartListState) => {
+    return state.chartList
 }
 
 export const addChart = (state: ChartListState) => {
