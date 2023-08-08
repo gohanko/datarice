@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
@@ -8,17 +8,15 @@ import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
 import useFileList from '../../stores/file_list/file_list';
 import { getFileData } from '../../stores/file_list/helpers';
-import styles from './chart.module.css'
 
 const Chart = ({
     id,
-    data_url,
     chart_setting,
+    data_url,
 }: ChartType) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(!data_url)
     const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [currentX, setCurrentX] = useState('')
-
     const file_data_list = useFileList((state) => state.file_data_list)
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
@@ -129,7 +127,6 @@ const Chart = ({
             <ReactECharts
                 notMerge={true}
                 option={chartOption}
-                className={styles.echarts}
             />
         </Card>
     );

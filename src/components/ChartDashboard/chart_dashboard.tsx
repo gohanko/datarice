@@ -42,11 +42,7 @@ const ChartDashboard = () => {
             <Row gutter={[16, 16]}>
                 { chart_list.map((chart, index) => (
                     <Col span={12} key={index}>
-                        <Chart
-                            id={chart.id}
-                            data_url={chart.data_url}
-                            chart_setting={chart.chart_setting}
-                        />
+                        <Chart {...chart} />
                     </Col>
                 ))}
             </Row>
