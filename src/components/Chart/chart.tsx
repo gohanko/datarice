@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Ref, RefAttributes } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
@@ -9,7 +9,6 @@ import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
 import useFileList from '../../stores/file_list/file_list';
 import { getFileData } from '../../stores/file_list/helpers';
-import { deepCopy } from '../../helpers/random';
 
 const Chart = ({
     id,
@@ -48,7 +47,7 @@ const Chart = ({
         return series
     }
 
-    const getDataset = () => deepCopy(fileData?.content || [])
+    const getDataset = () => JSON.parse(JSON.stringify(fileData?.content || []))
 
     useEffect(() => {
         if (!echartsInstance && echartsRef.current) {
@@ -123,7 +122,7 @@ const Chart = ({
             <ReactECharts
                 ref={echartsRef}
                 notMerge={true}
-                option={deepCopy(DEFAULT_CHART_OPTIONS)}
+                option={JSON.parse(JSON.stringify(DEFAULT_CHART_OPTIONS))}
             />
         </Card>
     );

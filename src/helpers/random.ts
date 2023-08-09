@@ -27,13 +27,9 @@ const createItemAndLabel = (values, capitalise_label=false) => {
     }))
 }
 
-const deepCopy = (to_copy) => {
-    return JSON.parse(JSON.stringify(to_copy))
-}
 
 export {
     isFileFormatSupported,
     formatDate,
-    createItemAndLabel,
-    deepCopy
+    createItemAndLabel
 }
