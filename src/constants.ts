@@ -10,26 +10,6 @@ const DEFAULT_CHART_OPTIONS = {
     dataset: {
         source: []
     },
-    dataZoom: [
-        {
-            type: 'slider',
-            show: true,
-            xAxisIndex: [0],
-        },
-        {
-            type: 'slider',
-            show: true,
-            yAxisIndex: [0],
-        },
-        {
-            type: 'inside',
-            xAxisIndex: [0],
-        },
-        {
-            type: 'inside',
-            yAxisIndex: [0],
-        }
-    ],
     title: {
         text: '',
     },
