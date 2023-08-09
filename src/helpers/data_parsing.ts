@@ -1,4 +1,5 @@
 import { SUPPORTED_FILE_FORMAT } from "../constants"
+import { deepCopy } from "./random"
 
 const DataParsing = (() => {
     // Converts JSON object into a 2D table
@@ -29,7 +30,7 @@ const DataParsing = (() => {
     }
 
     const parseFileData = (fileData) => {
-        const newFileData = JSON.parse(JSON.stringify(fileData)) // Deepcopy here because parseFileData will alter the original dataset causing bugs.
+        const newFileData = deepCopy(fileData) // Deepcopy here because parseFileData will alter the original dataset causing bugs.
         let dataset = [];
         
         if (newFileData) {
