@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, Ref, RefAttributes } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
+import { ECharts } from 'echarts';
 import ChartSettings from '../ChartSettings';
 import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
@@ -15,9 +16,11 @@ const Chart = ({
     dataUrl,
 }: ChartType) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(!dataUrl)
-    const [chartOption, setChartOption] = useState({ ...DEFAULT_CHART_OPTIONS })
     const [currentX, setCurrentX] = useState('')
-    const file_data_list = useFileList((state) => state.file_data_list)
+    const [echartsInstance, setEChartsInstance] = useState<ECharts>()
+    const fileData = useFileList((state) => getFileData(dataUrl, state.file_data_list))
+
+    const echartsRef = useRef()
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
@@ -27,60 +30,51 @@ const Chart = ({
                 type: chartSetting.chartType,
             }
         }
-
-        return column_header
+        
+        const series = column_header
             .filter((header) => header != currentX)
-            .map((header) => ({
-                type: chartSetting.chartType,
-                name: header,
-                encode: {
-                    x: currentX,
-                    y: header
-                },
-            }))
+            .map((header) => {
+                return {
+                    type: chartSetting.chartType,
+                    name: header,
+                    encode: {
+                        x: currentX || column_header[0],
+                        y: header
+                    },
+                }
+            })
+
+        return series
     }
 
-    const getDatasetColumn = () => {
-        const dataset = getFileData(
-            dataUrl,
-            file_data_list
-        ).content
-        if (dataset.length == 0) {
-            return []
+    const getDataset = () => JSON.parse(JSON.stringify(fileData?.content || []))
+
+    useEffect(() => {
+        if (!echartsInstance && echartsRef.current) {
+            setEChartsInstance(echartsRef.current.getEchartsInstance())
         }
-
-        return dataset[0]
-    }
+    }, [])
 
     useEffect(() => {
         if (!dataUrl) {
             return
         }
 
-        const payload = {
-            dataUrl: dataUrl
-        }
-
         const socket = io();
         socket.emit(
             'load-data-from-data-file',
-            JSON.stringify(payload)
+            JSON.stringify({ dataUrl })
         )
     }, [dataUrl])
 
     useEffect(() => {
-        const dataset = getFileData(dataUrl, file_data_list).content
-        if (dataset.length == 0) {
+        const dataset = getDataset()
+        if (dataset.length == 0 || !echartsInstance) {
             return
         }
 
-        if (!currentX) {
-            setCurrentX(dataset[0][0])
-        }
-
         const series = createSeries(dataset[0])
-        setChartOption(chartOption => ({
-            ...chartOption,
+        echartsInstance.setOption({
             title: {
                 text: dataUrl
             },
@@ -88,20 +82,22 @@ const Chart = ({
                 source: dataset
             },
             series: series
-        }))
-    }, [file_data_list])
+        })
+    }, [fileData])
 
     useEffect(() => {
-        const dataset = getFileData(dataUrl, file_data_list).content
-        if (dataset.length == 0) {
+        const dataset = getDataset()
+        if (dataset.length == 0 || !echartsInstance) {
             return
         }
 
         const series = createSeries(dataset[0])
-        setChartOption(chartOption => ({
-            ...chartOption,
+        echartsInstance.setOption({
+            dataset: {
+                source: dataset
+            },
             series: series
-        }))
+        })
     }, [chartSetting.chartType, currentX])
 
     return (
@@ -117,15 +113,16 @@ const Chart = ({
                 chartId={id}
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
-                datasetColumn={getDatasetColumn()}
+                datasetColumn={getDataset()[0]}
                 currentX={currentX}
                 setCurrentX={setCurrentX}
                 dataUrl={dataUrl}
                 chartSetting={chartSetting}
             />
             <ReactECharts
+                ref={echartsRef}
                 notMerge={true}
-                option={chartOption}
+                option={JSON.parse(JSON.stringify(DEFAULT_CHART_OPTIONS))}
             />
         </Card>
     );

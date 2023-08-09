@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from "zustand/middleware/immer";
 import { produce } from 'immer';
+import { v4 as uuidv4 } from 'uuid'
 import { ChartType } from '../../types/chart';
 
 export interface ChartListState {
@@ -21,7 +22,7 @@ const useChartList = create<ChartListState>()(
                     addChart: (chart: ChartType) => set(
                         produce((draft) => {
                             draft.chartList.push({
-                                id: draft.chartList.length,
+                                id: uuidv4(),
                                 dataUrl: chart.dataUrl,
                                 chartSetting: {
                                     chartType: 'line'
