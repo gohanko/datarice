@@ -20,7 +20,7 @@ const Chart = ({
     const [echartsInstance, setEChartsInstance] = useState<ECharts>()
     const fileData = useFileList((state) => getFileData(dataUrl, state.file_data_list))
 
-    const echartsRef = useRef()
+    const echartsRef = useRef<any>()
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
@@ -50,16 +50,15 @@ const Chart = ({
     const getDataset = () => JSON.parse(JSON.stringify(fileData?.content || []))
 
     const setOption = (options) => {
-        const replaceMerge = ['series']
+        const newOptions = JSON.parse(JSON.stringify(options))
+
+        const replaceMerge = []
 
         if (chartSetting.chartType == 'pie') {
+            replaceMerge.push('series')
             replaceMerge.push('dataZoom')
         } else {
-            if (replaceMerge.length != 1) {
-                replaceMerge.pop()
-            }
-        
-            options['dataZoom'] = [
+            newOptions['dataZoom'] = [
                 {
                     type: 'slider',
                     show: true,
@@ -81,7 +80,7 @@ const Chart = ({
             ]
         }
 
-        echartsInstance.setOption(options, { replaceMerge })
+        echartsInstance.setOption(newOptions, { replaceMerge })
     }
 
     useEffect(() => {
@@ -96,10 +95,7 @@ const Chart = ({
         }
 
         const socket = io();
-        socket.emit(
-            'load-data-from-data-file',
-            JSON.stringify({ dataUrl })
-        )
+        socket.emit('load-data-from-data-file', JSON.stringify({ dataUrl }))
     }, [dataUrl])
 
     useEffect(() => {
