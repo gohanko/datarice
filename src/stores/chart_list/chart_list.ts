@@ -37,11 +37,11 @@ const useChartList = create<ChartListState>()(
                             }
                         })
                     ),
-                    setChartType: (id: number, chart_type: string) => set(
+                    setChartType: (id: number, chartType: string) => set(
                         produce((draft) => {
                             const chart = draft.chartList.find((chart) => chart.id == id)
                             if (chart) {
-                                chart.chart_setting.chart_type = chart_type
+                                chart.chartSetting.chartType = chartType
                             }
                         })
                     ),
