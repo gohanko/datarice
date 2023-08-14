@@ -18,6 +18,8 @@ npm run start
 
 This should run the server. It'll take a while to actually start, but you can start using the URL given to access the web interface.
 
+Typicall, the URL will be at [http://localhost:3000/](http://localhost:3000/).
+
 ## Configuration
 The ```.env```, ```.env.development```, and ```.env.production``` files are all configuration files setting some default environment variables. For more information please have a look at this [documentation](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#default-environment-variables).
 
