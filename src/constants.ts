@@ -10,26 +10,6 @@ const DEFAULT_CHART_OPTIONS = {
     dataset: {
         source: []
     },
-    dataZoom: [
-        {
-            type: 'slider',
-            show: true,
-            xAxisIndex: [0],
-        },
-        {
-            type: 'slider',
-            show: true,
-            yAxisIndex: [0],
-        },
-        {
-            type: 'inside',
-            xAxisIndex: [0],
-        },
-        {
-            type: 'inside',
-            yAxisIndex: [0],
-        }
-    ],
     title: {
         text: '',
     },
@@ -52,9 +32,6 @@ const DEFAULT_CHART_OPTIONS = {
     series: [],
     xAxis: {
         type: 'category',
-        axisLabel: {
-            formatter: (value) => formatDate(value, 'MMM DD')
-        }
     },
     yAxis: {
         min: 24

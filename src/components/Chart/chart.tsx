@@ -20,7 +20,7 @@ const Chart = ({
     const [echartsInstance, setEChartsInstance] = useState<ECharts>()
     const fileData = useFileList((state) => getFileData(dataUrl, state.file_data_list))
 
-    const echartsRef = useRef()
+    const echartsRef = useRef<any>()
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
@@ -49,6 +49,40 @@ const Chart = ({
 
     const getDataset = () => JSON.parse(JSON.stringify(fileData?.content || []))
 
+    const setOption = (options) => {
+        const newOptions = JSON.parse(JSON.stringify(options))
+
+        const replaceMerge = []
+
+        if (chartSetting.chartType == 'pie') {
+            replaceMerge.push('series')
+            replaceMerge.push('dataZoom')
+        } else {
+            newOptions['dataZoom'] = [
+                {
+                    type: 'slider',
+                    show: true,
+                    xAxisIndex: [0],
+                },
+                {
+                    type: 'slider',
+                    show: true,
+                    yAxisIndex: [0],
+                },
+                {
+                    type: 'inside',
+                    xAxisIndex: [0],
+                },
+                {
+                    type: 'inside',
+                    yAxisIndex: [0],
+                }
+            ]
+        }
+
+        echartsInstance.setOption(newOptions, { replaceMerge })
+    }
+
     useEffect(() => {
         if (!echartsInstance && echartsRef.current) {
             setEChartsInstance(echartsRef.current.getEchartsInstance())
@@ -61,10 +95,7 @@ const Chart = ({
         }
 
         const socket = io();
-        socket.emit(
-            'load-data-from-data-file',
-            JSON.stringify({ dataUrl })
-        )
+        socket.emit('load-data-from-data-file', JSON.stringify({ dataUrl }))
     }, [dataUrl])
 
     useEffect(() => {
@@ -74,7 +105,7 @@ const Chart = ({
         }
 
         const series = createSeries(dataset[0])
-        echartsInstance.setOption({
+        setOption({
             title: {
                 text: dataUrl
             },
@@ -92,12 +123,7 @@ const Chart = ({
         }
 
         const series = createSeries(dataset[0])
-        echartsInstance.setOption({
-            dataset: {
-                source: dataset
-            },
-            series: series
-        })
+        setOption({ series: series })
     }, [chartSetting.chartType, currentX])
 
     return (
@@ -121,7 +147,6 @@ const Chart = ({
             />
             <ReactECharts
                 ref={echartsRef}
-                notMerge={true}
                 option={JSON.parse(JSON.stringify(DEFAULT_CHART_OPTIONS))}
             />
         </Card>

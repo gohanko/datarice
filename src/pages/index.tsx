@@ -3,10 +3,7 @@ import Image from 'next/image';
 import { Layout, theme, Menu, Row, Col } from 'antd';
 import {
     LineChartOutlined,
-    PieChartOutlined,
-    FolderOpenOutlined,
     InfoCircleOutlined,
-    CreditCardOutlined,
 } from '@ant-design/icons';
 import ChartDashboard from '../components/ChartDashboard';
 
@@ -25,21 +22,6 @@ const Home = () => {
         },
         {
             key: 2,
-            label: 'File Manager',
-            icon: <FolderOpenOutlined />,
-        },
-        {
-            key: 3,
-            label: 'System Resources',
-            icon: <PieChartOutlined />,
-        },
-        {
-            key: 4,
-            label: 'Terminal',
-            icon: <CreditCardOutlined />,
-        },
-        {
-            key: 5,
             label: 'About',
             icon: <InfoCircleOutlined />,
         },
@@ -104,7 +86,9 @@ const Home = () => {
                         <ChartDashboard />
                     }
                 </Content>
-                <Footer style={{ textAlign: 'center' }}> DataRice - Created by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong</a> with ❤️</Footer>
+                <Footer style={{ textAlign: 'center' }}>
+                    Made with ❤️ by <a href="https://github.com/gohanko" target="_blank">Yii Kuo Chong / 俞國忠</a>
+                </Footer>
             </Layout>
         </Layout>
     )
