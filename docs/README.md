@@ -16,7 +16,7 @@ The application is now installed, and all you need to do next is to run this com
 npm run start
 ```
 
-And then access the interface through a browser.
+This should run the server. It'll take a while to actually start, but you can start using the URL given to access the web interface.
 
 ## Configuration
 The ```.env```, ```.env.development```, and ```.env.production``` files are all configuration files setting some default environment variables. For more information please have a look at this [documentation](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#default-environment-variables).
