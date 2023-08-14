@@ -32,9 +32,6 @@ const DEFAULT_CHART_OPTIONS = {
     series: [],
     xAxis: {
         type: 'category',
-        axisLabel: {
-            formatter: (value) => formatDate(value, 'MMM DD')
-        }
     },
     yAxis: {
         min: 24

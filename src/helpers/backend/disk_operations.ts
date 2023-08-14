@@ -19,7 +19,7 @@ const readDataFile = (filename) => {
     case SUPPORTED_FILE_FORMAT[2]:
     case SUPPORTED_FILE_FORMAT[3]: {
         const raw_data = fs.readFileSync(filename)
-        const workbook = xlsx.read(raw_data, { raw: true })
+        const workbook = xlsx.read(raw_data, { raw: true, cellDates: true })
 
         parsed_data = Object.keys(workbook.Sheets).map((name) => {
             const sheet = workbook.Sheets[name]

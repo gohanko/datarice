@@ -8,7 +8,7 @@ const isFileFormatSupported = (filename: string) => {
 }
 
 const formatDate = (value: string, format_template: string) => {
-    const date = dayjs(value, SYSTEM_DATE_FORMAT)
+    const date = dayjs(value)
     if (date.isValid()) {
         return date.format(format_template)
     }
