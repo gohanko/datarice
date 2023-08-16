@@ -9,6 +9,7 @@ export interface ChartListState {
     chartList: Array<ChartType>
     addChart: (chart: ChartType) => void
     setDataURL: (id: number, dataUrl: string) => void
+    setCurrentX: (id: number, currentX: string) => void
     setChartType: (id: number, chartType: string) => void
     removeChart: (id: number) => void
 }
@@ -35,6 +36,14 @@ const useChartList = create<ChartListState>()(
                             const chart = draft.chartList.find((chart) => chart.id == id)
                             if (chart) {
                                 chart.dataUrl = dataUrl
+                            }
+                        })
+                    ),
+                    setCurrentX: (id: number, currentX: string) => set(
+                        produce((draft) => {
+                            const chart = draft.chartList.find((chart) => chart.id == id)
+                            if (chart) {
+                                chart.chartSetting.currentX = currentX
                             }
                         })
                     ),

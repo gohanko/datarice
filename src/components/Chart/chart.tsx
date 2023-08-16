@@ -9,6 +9,8 @@ import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS } from "../../constants"
 import useFileList from '../../stores/file_list/file_list';
 import { getFileData } from '../../stores/file_list/helpers';
+import useChartList from '../../stores/chart_list/chart_list';
+import * as selectors from '../../stores/chart_list/selectors';
 
 const Chart = ({
     id,
@@ -16,9 +18,9 @@ const Chart = ({
     dataUrl,
 }: ChartType) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(!dataUrl)
-    const [currentX, setCurrentX] = useState('')
     const [echartsInstance, setEChartsInstance] = useState<ECharts>()
     const fileData = useFileList((state) => getFileData(dataUrl, state.file_data_list))
+    const setCurrentX = useChartList(selectors.setCurrentX)
 
     const echartsRef = useRef<any>()
 
@@ -32,13 +34,13 @@ const Chart = ({
         }
         
         const series = column_header
-            .filter((header) => header != currentX)
+            .filter((header) => header != chartSetting.currentX)
             .map((header) => {
                 return {
                     type: chartSetting.chartType,
                     name: header,
                     encode: {
-                        x: currentX || column_header[0],
+                        x: chartSetting.currentX || column_header[0],
                         y: header
                     },
                 }
@@ -104,6 +106,10 @@ const Chart = ({
             return
         }
 
+        if (!chartSetting.currentX) {
+            setCurrentX(id, dataset[0][0])
+        }
+
         const series = createSeries(dataset[0])
         setOption({
             title: {
@@ -124,7 +130,7 @@ const Chart = ({
 
         const series = createSeries(dataset[0])
         setOption({ series: series })
-    }, [chartSetting.chartType, currentX])
+    }, [chartSetting.chartType, chartSetting.currentX])
 
     return (
         <Card
@@ -140,8 +146,6 @@ const Chart = ({
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={toggleChartSettings}
                 datasetColumn={getDataset()[0]}
-                currentX={currentX}
-                setCurrentX={setCurrentX}
                 dataUrl={dataUrl}
                 chartSetting={chartSetting}
             />

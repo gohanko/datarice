@@ -17,8 +17,6 @@ import { ChartSettingType } from '../../types/chart';
 type ChartSettingsProps = {
     isSettingsOpen: boolean,
     setIsSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    currentX: string,
-    setCurrentX: (column: string) => void,
     datasetColumn: Array<string>
     chartId: number,
     dataUrl: string,
@@ -28,8 +26,6 @@ type ChartSettingsProps = {
 const ChartSettings = ({
     isSettingsOpen,
     setIsSettingsOpen,
-    currentX,
-    setCurrentX,
     datasetColumn,
     chartId,
     dataUrl,
@@ -37,6 +33,7 @@ const ChartSettings = ({
 }: ChartSettingsProps) => {
     const setDataURL = useChartList(selectors.setDataURL)
     const setChartType = useChartList(selectors.setChartType)
+    const setCurrentX = useChartList(selectors.setCurrentX)
     const removeChart = useChartList(selectors.removeChart)
     const file_list = useFileList((state) => state.file_list)
     
@@ -68,7 +65,7 @@ const ChartSettings = ({
 
         const line_chart_x = form_value?.line_chart_x
         if (line_chart_x) {
-            setCurrentX(line_chart_x)
+            setCurrentX(chartId, line_chart_x)
         }
 
         setIsSettingsOpen(false)
@@ -104,7 +101,7 @@ const ChartSettings = ({
                 initialValues={{
                     ["filename"]: dataUrl,
                     ["chart_type"]: chartSetting.chartType,
-                    ["line_chart_x"]: currentX,
+                    ["line_chart_x"]: chartSetting.currentX,
                 }}
             >
                 <Form.Item

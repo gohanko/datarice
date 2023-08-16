@@ -1,5 +1,6 @@
 interface ChartSettingType {
     chartType: string
+    currentX: string
 }
 
 interface ChartType {

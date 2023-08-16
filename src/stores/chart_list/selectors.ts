@@ -12,6 +12,10 @@ export const setDataURL = (state: ChartListState) => {
     return state.setDataURL;
 };
 
+export const setCurrentX = (state: ChartListState) => {
+    return state.setCurrentX;
+}
+
 export const setChartType = (state: ChartListState) => {
     return state.setChartType;
 };
