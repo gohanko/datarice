@@ -8,6 +8,7 @@ import useFileList from '../../stores/file_list/file_list';
 import DataParsing from '../../helpers/data_parsing';
 import * as chart_list_selectors from '../../stores/chart_list/selectors';
 import * as file_list_selectors from '../../stores/file_list/selectors';
+import { WS_EVENT_NAMES } from '../../constants';
 
 const ChartDashboard = () => {
     const chartList = useChartList(chart_list_selectors.chartList)
@@ -17,24 +18,24 @@ const ChartDashboard = () => {
     const setFileData = useFileList(file_list_selectors.setFileData)
     
     useEffect(() => {
-        fetch('/api/temperature_data').finally(() => {
+        fetch('/api/socket').finally(() => {
             const socket = io();
-            
+
             socket.on('connect', () => {
-                socket.emit('list-existing-data-files')
+                socket.emit(WS_EVENT_NAMES.LIST_FILES)
             })
             
-            socket.on('list-existing-data-files', (file_list) => {
-                setFileList(file_list)
+            socket.on(WS_EVENT_NAMES.LIST_FILES, (fileList) => {
+                setFileList(fileList)
             })
 
-            socket.on('load-data-from-data-file', (fileData) => {
+            socket.on(WS_EVENT_NAMES.LOAD_DATA, (fileData) => {
                 const newFileData = DataParsing.parseFileData(fileData)
                 setFileData(newFileData)
             })
         })
     }, [])
-    
+
     const handleOnClickFloat = () => addChart({ dataUrl: '' })
 
     return (

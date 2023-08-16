@@ -17,7 +17,7 @@ const formatDate = (value: string, format_template: string) => {
 }
 
 const createItemAndLabel = (values, capitalise_label=false) => {
-    if (values.length == 0) {
+    if (!values?.length) {
         return []
     }
     

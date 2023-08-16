@@ -1,9 +1,9 @@
 import path from 'path';
 import { Server } from 'socket.io';
 import { FileManagerBackend } from '../../helpers/backend/disk_operations';
-import { DATA_STORE_DIRECTORY } from '../../constants';
+import { DATA_STORE_DIRECTORY, WS_EVENT_NAMES } from '../../constants';
 
-const TemperatureDataSocketHandler = (req, res) => {
+const SocketHandler = (req, res) => {
     if (res.socket.server.io) {
         res.end()
         return;
@@ -13,9 +13,9 @@ const TemperatureDataSocketHandler = (req, res) => {
     const file_manager_backend = FileManagerBackend();
     
     io.on('connection', (socket) => {
-        socket.on('list-existing-data-files', () => {
+        socket.on(WS_EVENT_NAMES.LIST_FILES, () => {
             const emit_files = (files) => {
-                socket.broadcast.emit('list-existing-data-files', files)
+                socket.broadcast.emit(WS_EVENT_NAMES.LIST_FILES, files)
             }
 
             file_manager_backend
@@ -24,11 +24,11 @@ const TemperatureDataSocketHandler = (req, res) => {
                 .on('unlink', emit_files)
         })
 
-        socket.on('load-data-from-data-file', (data) => {
+        socket.on(WS_EVENT_NAMES.LOAD_DATA, (data) => {
             const packet = JSON.parse(data)
 
             const emit_content = (content) => {
-                socket.broadcast.emit('load-data-from-data-file', content)
+                socket.broadcast.emit(WS_EVENT_NAMES.LOAD_DATA, content)
             }
 
             if (!packet?.dataUrl) {
@@ -47,4 +47,4 @@ const TemperatureDataSocketHandler = (req, res) => {
     res.end();
 }
 
-export default TemperatureDataSocketHandler;
+export default SocketHandler;

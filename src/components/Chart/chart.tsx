@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { io } from "socket.io-client";
 import { Card } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { ECharts } from 'echarts';
 import ChartSettings from '../ChartSettings';
 import { ChartType } from '../../types/chart';
-import { DEFAULT_CHART_OPTIONS } from "../../constants"
+import { DEFAULT_CHART_OPTIONS, WS_EVENT_NAMES } from "../../constants"
 import useFileList from '../../stores/file_list/file_list';
 import { getFileData } from '../../stores/file_list/helpers';
-import useChartList from '../../stores/chart_list/chart_list';
-import * as selectors from '../../stores/chart_list/selectors';
 
 const Chart = ({
     id,
@@ -18,16 +15,14 @@ const Chart = ({
     dataUrl,
 }: ChartType) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(!dataUrl)
-    const [echartsInstance, setEChartsInstance] = useState<ECharts>()
     const fileData = useFileList((state) => getFileData(dataUrl, state.file_data_list))
-    const setCurrentX = useChartList(selectors.setCurrentX)
 
-    const echartsRef = useRef<any>()
+    const isPie = chartSetting.chartType == 'pie'
 
     const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
 
     const createSeries = (column_header) => {
-        if (chartSetting.chartType == 'pie') {
+        if (isPie) {
             return {
                 type: chartSetting.chartType,
             }
@@ -51,16 +46,22 @@ const Chart = ({
 
     const getDataset = () => JSON.parse(JSON.stringify(fileData?.content || []))
 
-    const setOption = (options) => {
-        const newOptions = JSON.parse(JSON.stringify(options))
+    const getOption = () => {
+        const dataset = getDataset()
+        const series = createSeries(dataset?.[0] || [])
+        const option = {
+            ...JSON.parse(JSON.stringify(DEFAULT_CHART_OPTIONS)),
+            title: {
+                text: dataUrl
+            },
+            dataset: {
+                source: dataset
+            },
+            series: series
+        }
 
-        const replaceMerge = []
-
-        if (chartSetting.chartType == 'pie') {
-            replaceMerge.push('series')
-            replaceMerge.push('dataZoom')
-        } else {
-            newOptions['dataZoom'] = [
+        if (!isPie) {
+            option['dataZoom'] = [
                 {
                     type: 'slider',
                     show: true,
@@ -82,14 +83,8 @@ const Chart = ({
             ]
         }
 
-        echartsInstance.setOption(newOptions, { replaceMerge })
+        return option
     }
-
-    useEffect(() => {
-        if (!echartsInstance && echartsRef.current) {
-            setEChartsInstance(echartsRef.current.getEchartsInstance())
-        }
-    }, [])
 
     useEffect(() => {
         if (!dataUrl) {
@@ -97,40 +92,8 @@ const Chart = ({
         }
 
         const socket = io();
-        socket.emit('load-data-from-data-file', JSON.stringify({ dataUrl }))
+        socket.emit(WS_EVENT_NAMES.LOAD_DATA, JSON.stringify({ dataUrl }))
     }, [dataUrl])
-
-    useEffect(() => {
-        const dataset = getDataset()
-        if (dataset.length == 0 || !echartsInstance) {
-            return
-        }
-
-        if (!chartSetting.currentX) {
-            setCurrentX(id, dataset[0][0])
-        }
-
-        const series = createSeries(dataset[0])
-        setOption({
-            title: {
-                text: dataUrl
-            },
-            dataset: {
-                source: dataset
-            },
-            series: series
-        })
-    }, [fileData])
-
-    useEffect(() => {
-        const dataset = getDataset()
-        if (dataset.length == 0 || !echartsInstance) {
-            return
-        }
-
-        const series = createSeries(dataset[0])
-        setOption({ series: series })
-    }, [chartSetting.chartType, chartSetting.currentX])
 
     return (
         <Card
@@ -150,8 +113,8 @@ const Chart = ({
                 chartSetting={chartSetting}
             />
             <ReactECharts
-                ref={echartsRef}
-                option={JSON.parse(JSON.stringify(DEFAULT_CHART_OPTIONS))}
+                option={getOption()}
+                notMerge={isPie} // Note: setting this to true will fix the issue when changing xAxis
             />
         </Card>
     );

@@ -59,6 +59,11 @@ const SUPPORTED_FILE_FORMAT = [
     '.json'
 ]
 
+const WS_EVENT_NAMES = {
+    LIST_FILES: 'list-files',
+    LOAD_DATA: 'load-data',
+}
+
 export {
     DATA_STORE_DIRECTORY,
     DEFAULT_CHART_TYPE_SIZES,
@@ -66,4 +71,5 @@ export {
     SUPPORTED_CHART_TYPES,
     SUPPORTED_FILE_FORMAT,
     SYSTEM_DATE_FORMAT,
+    WS_EVENT_NAMES
 };
