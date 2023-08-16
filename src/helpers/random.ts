@@ -1,6 +1,6 @@
 import path from 'path'
 import dayjs from 'dayjs';
-import { SUPPORTED_FILE_FORMAT, SYSTEM_DATE_FORMAT } from "../constants"
+import { SUPPORTED_FILE_FORMAT } from "../constants"
 
 const isFileFormatSupported = (filename: string) => {
     const extension = path.extname(filename)

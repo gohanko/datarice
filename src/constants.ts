@@ -1,5 +1,3 @@
-import { formatDate } from "./helpers/random";
-
 const DATA_STORE_DIRECTORY = process.env.DATA_STORE_DIRECTORY;
 
 const DEFAULT_CHART_TYPE_SIZES = {

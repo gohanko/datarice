@@ -10,6 +10,14 @@ cd datarice
 npm ci
 ```
 
+Then you need to build it using this command.
+
+```bash
+npm run build
+```
+
+> Note: Building the application takes a while, and only need to be done once. You also should rebuild it every time you update it.
+
 The application is now installed, and all you need to do next is to run this command.
 
 ```bash
