@@ -6,19 +6,18 @@ import { DATA_STORE_DIRECTORY, WS_EVENT_NAMES } from '../../constants';
 const SocketHandler = (req, res) => {
     if (res.socket.server.io) {
         res.end()
-        return;
+        return
     }
 
     const io = new Server(res.socket.server)
-    const file_manager_backend = FileManagerBackend();
     
     io.on('connection', (socket) => {
         socket.on(WS_EVENT_NAMES.LIST_FILES, () => {
             const emit_files = (files) => {
-                socket.broadcast.emit(WS_EVENT_NAMES.LIST_FILES, files)
+                io.sockets.emit(WS_EVENT_NAMES.LIST_FILES, files)
             }
 
-            file_manager_backend
+            FileManagerBackend
                 .list_and_watch(DATA_STORE_DIRECTORY, emit_files)
                 .on('add', emit_files)
                 .on('unlink', emit_files)
@@ -28,7 +27,7 @@ const SocketHandler = (req, res) => {
             const packet = JSON.parse(data)
 
             const emit_content = (content) => {
-                socket.broadcast.emit(WS_EVENT_NAMES.LOAD_DATA, content)
+                io.sockets.emit(WS_EVENT_NAMES.LOAD_DATA, content)
             }
 
             if (!packet?.dataUrl) {
@@ -37,7 +36,7 @@ const SocketHandler = (req, res) => {
             }
 
             const full_file_path = path.join(DATA_STORE_DIRECTORY, packet.dataUrl);
-            file_manager_backend
+            FileManagerBackend
                 .read_and_watch(full_file_path, emit_content)
                 .on('change', emit_content)
         })

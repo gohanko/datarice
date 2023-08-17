@@ -49,7 +49,7 @@ const readDataFile = (filename) => {
     };
 }
 
-const FileManagerBackend = () => {
+const FileManagerBackend = (() => {
     const list = (file_path) => {
         const data = fs.readdirSync(file_path);
         return data.map((filename) => filename)
@@ -100,7 +100,7 @@ const FileManagerBackend = () => {
         list_and_watch,
         read_and_watch,
     }
-}
+})()
 
 export {
     readDataFile,

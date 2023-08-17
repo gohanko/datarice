@@ -8,6 +8,8 @@ import { ChartType } from '../../types/chart';
 import { DEFAULT_CHART_OPTIONS, WS_EVENT_NAMES } from "../../constants"
 import useFileList from '../../stores/file_list/file_list';
 import { getFileData } from '../../stores/file_list/helpers';
+import useChartList from '../../stores/chart_list/chart_list';
+import * as selectors from '../../stores/chart_list/selectors';
 
 const Chart = ({
     id,
@@ -16,10 +18,12 @@ const Chart = ({
 }: ChartType) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(!dataUrl)
     const fileData = useFileList((state) => getFileData(dataUrl, state.file_data_list))
-
+    const setCurrentX = useChartList(selectors.setCurrentX)
     const isPie = chartSetting.chartType == 'pie'
 
-    const toggleChartSettings = () => setIsSettingsOpen(!isSettingsOpen)
+    const toggleChartSettings = () => {
+        setIsSettingsOpen(!isSettingsOpen)
+    }
 
     const createSeries = (column_header) => {
         if (isPie) {
@@ -44,7 +48,9 @@ const Chart = ({
         return series
     }
 
-    const getDataset = () => JSON.parse(JSON.stringify(fileData?.content || []))
+    const getDataset = () => {
+        return JSON.parse(JSON.stringify(fileData?.content || []))
+    }
 
     const getOption = () => {
         const dataset = getDataset()
@@ -94,6 +100,15 @@ const Chart = ({
         const socket = io();
         socket.emit(WS_EVENT_NAMES.LOAD_DATA, JSON.stringify({ dataUrl }))
     }, [dataUrl])
+
+    useEffect(() => {
+        const dataset = getDataset()
+        if (dataset && dataset?.[0] && dataset?.[0]?.[0]) {
+            if (!dataset[0].includes(chartSetting.currentX)) {
+                setCurrentX(id, dataset[0][0])
+            }
+        }
+    }, [fileData])
 
     return (
         <Card

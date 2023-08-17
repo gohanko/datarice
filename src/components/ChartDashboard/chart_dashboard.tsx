@@ -16,10 +16,13 @@ const ChartDashboard = () => {
 
     const setFileList = useFileList(file_list_selectors.setFileList)
     const setFileData = useFileList(file_list_selectors.setFileData)
-    
+
+    const handleOnClickFloat = () => addChart({ dataUrl: '' })
+
     useEffect(() => {
-        fetch('/api/socket').finally(() => {
-            const socket = io();
+        const socket = io()
+        const socketInitializer = async () => {
+            await fetch('/api/socket')
 
             socket.on('connect', () => {
                 socket.emit(WS_EVENT_NAMES.LIST_FILES)
@@ -33,10 +36,17 @@ const ChartDashboard = () => {
                 const newFileData = DataParsing.parseFileData(fileData)
                 setFileData(newFileData)
             })
-        })
-    }, [])
+        }
 
-    const handleOnClickFloat = () => addChart({ dataUrl: '' })
+        socketInitializer()
+
+        return () => {
+            if (socket) {
+                socket.removeAllListeners();
+                socket.close();
+            }
+        }
+    }, [])
 
     return (
         <React.Fragment>

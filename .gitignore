@@ -35,4 +35,4 @@ yarn-error.log*
 .vercel
 
 # Demo
-fixtures/demo.xlsx
+fixtures/continuous_write.xlsx

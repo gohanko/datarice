@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 
 xlsx.set_fs(fs);
 
-const FILENAME = './fixtures/demo.xlsx'
+const FILENAME = './fixtures/continuous_write.xlsx'
 const startFromDate = dayjs()
 
 const initiateWorkbook = () => {
