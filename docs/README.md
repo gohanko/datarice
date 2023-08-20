@@ -24,7 +24,7 @@ The application is now installed, and all you need to do next is to run this com
 npm run start
 ```
 
-The URL to access it will be at [http://localhost:3000/](http://localhost:3000/)
+The URL to access it will be at in the terminal, but usually is at [http://localhost:3000/](http://localhost:3000/)
 
 ## Configuration
 The ```.env```, ```.env.development```, and ```.env.production``` files are all configuration files setting some default environment variables. For more information please have a look at this [documentation](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#default-environment-variables).
