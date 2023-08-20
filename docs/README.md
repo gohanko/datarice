@@ -10,23 +10,21 @@ cd datarice
 npm ci
 ```
 
-Then you need to build it using this command.
+Then you need to build it using this command. Building the application takes a few moinutes, but only need to be done once. 
 
 ```bash
 npm run build
 ```
 
-> Note: Building the application takes a while, and only need to be done once. You also should rebuild it every time you update it.
+> Note: You also should rebuild it every time you update it.
 
-The application is now installed, and all you need to do next is to run this command.
+The application is now installed, and all you need to do next is to run this command to start it.
 
 ```bash
 npm run start
 ```
 
-This should run the server. It'll take a while to actually start, but you can start using the URL given to access the web interface.
-
-Typicall, the URL will be at [http://localhost:3000/](http://localhost:3000/).
+The URL to access it will be at [http://localhost:3000/](http://localhost:3000/)
 
 ## Configuration
 The ```.env```, ```.env.development```, and ```.env.production``` files are all configuration files setting some default environment variables. For more information please have a look at this [documentation](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables#default-environment-variables).
