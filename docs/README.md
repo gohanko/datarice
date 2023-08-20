@@ -10,7 +10,7 @@ cd datarice
 npm ci
 ```
 
-Then you need to build it using this command. Building the application takes a few moinutes, but only need to be done once. 
+Then you need to build it using this command. Building the application takes a few minutes, but only need to be done once. 
 
 ```bash
 npm run build
