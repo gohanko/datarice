@@ -31,9 +31,7 @@ const DEFAULT_CHART_OPTIONS = {
     xAxis: {
         type: 'category',
     },
-    yAxis: {
-        min: 24
-    },
+    yAxis: {},
 }
 
 const SYSTEM_DATE_FORMAT = 'YYYY-MM-DD'
